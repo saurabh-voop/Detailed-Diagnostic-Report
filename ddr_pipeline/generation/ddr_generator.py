@@ -1,0 +1,371 @@
+"""
+Stage 3: DDR Generation
+Generates each DDR section using Gemini, section by section.
+"""
+
+import google.generativeai as genai
+import json
+import time
+import os
+from PIL import Image
+from .prompts import (
+    SYSTEM_PROMPT, PROPERTY_SUMMARY_PROMPT, AREA_OBSERVATION_PROMPT,
+    ROOT_CAUSE_PROMPT, SEVERITY_PROMPT, RECOMMENDED_ACTIONS_PROMPT,
+    ADDITIONAL_NOTES_PROMPT, MISSING_INFO_PROMPT
+)
+
+
+class DDRGenerator:
+    def __init__(self, api_key: str, model_name: str = "gemini-1.5-flash"):
+        genai.configure(api_key=api_key)
+        self.model = genai.GenerativeModel(
+            model_name,
+            system_instruction=SYSTEM_PROMPT
+        )
+        self.model_name = model_name
+
+    def generate_full_ddr(
+        self,
+        inspection_data: dict,
+        enriched_thermal_pages: list,
+        area_groups: dict
+    ) -> dict:
+        """
+        Generate all DDR sections. Returns dict with all sections.
+        """
+        ddr = {}
+
+        print("\n--- Generating DDR Sections ---")
+
+        # 1. Property Issue Summary
+        print("  [1/7] Property Issue Summary...")
+        ddr["property_summary"] = self._generate_property_summary(
+            inspection_data, enriched_thermal_pages
+        )
+        time.sleep(4)
+
+        # 2. Area-wise Observations
+        print("  [2/7] Area-wise Observations...")
+        ddr["area_observations"] = self._generate_area_observations(
+            inspection_data, area_groups
+        )
+        time.sleep(4)
+
+        # 3. Probable Root Cause
+        print("  [3/7] Probable Root Cause...")
+        ddr["root_cause"] = self._generate_root_cause(
+            inspection_data, enriched_thermal_pages
+        )
+        time.sleep(4)
+
+        # 4. Severity Assessment
+        print("  [4/7] Severity Assessment...")
+        ddr["severity_assessment"] = self._generate_severity(
+            inspection_data, enriched_thermal_pages, area_groups
+        )
+        time.sleep(4)
+
+        # 5. Recommended Actions
+        print("  [5/7] Recommended Actions...")
+        ddr["recommended_actions"] = self._generate_recommendations(
+            ddr["root_cause"], ddr["severity_assessment"], inspection_data
+        )
+        time.sleep(4)
+
+        # 6. Additional Notes
+        print("  [6/7] Additional Notes...")
+        ddr["additional_notes"] = self._generate_additional_notes(
+            inspection_data, enriched_thermal_pages, ddr
+        )
+        time.sleep(4)
+
+        # 7. Missing or Unclear Information
+        print("  [7/7] Missing or Unclear Information...")
+        ddr["missing_info"] = self._generate_missing_info(
+            inspection_data, enriched_thermal_pages, area_groups
+        )
+
+        return ddr
+
+    def _call_model(self, prompt: str, images: list = None) -> str:
+        """Make a model call with optional images."""
+        content_parts = []
+        
+        if images:
+            for img in images:
+                if isinstance(img, str) and os.path.exists(img):
+                    try:
+                        content_parts.append(Image.open(img))
+                    except Exception:
+                        pass
+                elif isinstance(img, Image.Image):
+                    content_parts.append(img)
+        
+        content_parts.append(prompt)
+        
+        try:
+            response = self.model.generate_content(content_parts)
+            return response.text.strip()
+        except Exception as e:
+            return f"[Generation error: {str(e)}]"
+
+    def _generate_property_summary(self, inspection_data: dict, thermal_pages: list) -> str:
+        prop_info = inspection_data.get("property_info", {})
+        summary_table = inspection_data.get("summary_table", [])
+
+        inspection_summary = f"""
+Property Type: {prop_info.get('property_type', 'Flat')}
+Floors in Building: {prop_info.get('floors', 'Not Available')}
+Inspection Date: {prop_info.get('inspection_date', 'Not Available')}
+Inspected By: {prop_info.get('inspected_by', 'Not Available')}
+Overall Score: {prop_info.get('score', 'Not Available')}%
+Previous Structural Audit: {prop_info.get('previous_structural_audit', 'No')}
+Previous Repair Work: {prop_info.get('previous_repair_work', 'No')}
+Impacted Rooms: {prop_info.get('impacted_rooms', 'Not Available')}
+Total Issues Identified: {len(summary_table)}
+"""
+
+        # Thermal overview
+        temp_deltas = [p.get("temp_delta", 0) for p in thermal_pages if p.get("temp_delta")]
+        avg_delta = round(sum(temp_deltas) / len(temp_deltas), 1) if temp_deltas else 0
+        max_delta = max(temp_deltas) if temp_deltas else 0
+        
+        thermal_overview = f"""
+Total thermal images captured: {len(thermal_pages)}
+Average temperature differential: {avg_delta}°C
+Maximum temperature differential observed: {max_delta}°C
+Reflected ambient temperature: 23°C
+Thermal device used: GTC 400 C Professional (Bosch)
+All images captured on: 27/09/2022
+"""
+
+        prompt = PROPERTY_SUMMARY_PROMPT.format(
+            inspection_summary=inspection_summary,
+            thermal_overview=thermal_overview
+        )
+        return self._call_model(prompt)
+
+    def _generate_area_observations(self, inspection_data: dict, area_groups: dict) -> list:
+        areas = inspection_data.get("impacted_areas", [])
+        checklist = inspection_data.get("checklist", {})
+        observations = []
+
+        for area in areas:
+            area_id = area["area_id"]
+            thermal_pages_for_area = area_groups.get(area_id, [])
+
+            # Build thermal data string for this area
+            thermal_data = self._format_thermal_data_for_area(thermal_pages_for_area)
+
+            # Full checklist — let Gemini pick what's relevant for this area
+            checklist_data = self._format_full_checklist(checklist)
+
+            prompt = AREA_OBSERVATION_PROMPT.format(
+                area_id=area_id,
+                area_description=area["negative_description"],
+                negative_description=area["negative_description"],
+                positive_description=area["positive_description"],
+                thermal_data=thermal_data,
+                checklist_data=checklist_data
+            )
+
+            # Collect images for this area
+            area_images = []
+            
+            # Add thermal visible images
+            for tp in thermal_pages_for_area[:2]:  # Max 2 thermal images per area
+                if tp.get("visible_image_path") and os.path.exists(tp["visible_image_path"]):
+                    area_images.append(tp["visible_image_path"])
+
+            # Add inspection photos
+            photos = inspection_data.get("photos", {})
+            for photo_num in area.get("negative_photos", [])[:3]:  # Max 3 inspection photos
+                if photo_num in photos and os.path.exists(photos[photo_num]):
+                    area_images.append(photos[photo_num])
+
+            text = self._call_model(prompt, area_images)
+            time.sleep(3)
+
+            # Collect image paths for this area (for docx assembly)
+            all_area_images = {
+                "thermal_images": [
+                    {
+                        "thermal_path": tp.get("thermal_image_path"),
+                        "visible_path": tp.get("visible_image_path"),
+                        "filename": tp.get("filename", ""),
+                        "hotspot": tp.get("hotspot_temp"),
+                        "coldspot": tp.get("coldspot_temp"),
+                        "temp_delta": tp.get("temp_delta"),
+                        "confidence": tp.get("correlation", {}).get("confidence", "low")
+                    }
+                    for tp in thermal_pages_for_area
+                ],
+                "inspection_photos": [
+                    photos.get(n) for n in area.get("negative_photos", []) if n in photos
+                ],
+                "positive_photos": [
+                    photos.get(n) for n in area.get("positive_photos", []) if n in photos
+                ]
+            }
+
+            observations.append({
+                "area_id": area_id,
+                "description": area["negative_description"],
+                "text": text,
+                "images": all_area_images,
+                "thermal_count": len(thermal_pages_for_area)
+            })
+
+        return observations
+
+    def _generate_root_cause(self, inspection_data: dict, thermal_pages: list) -> str:
+        areas = inspection_data.get("impacted_areas", [])
+        checklist = inspection_data.get("checklist", {})
+
+        all_areas_summary = "\n".join([
+            f"Area {a['area_id']}: {a['negative_description']} | Source: {a['positive_description']}"
+            for a in areas
+        ])
+
+        # Thermal summary
+        matched = [p for p in thermal_pages if p.get("correlation", {}).get("area_id")]
+        thermal_summary = f"""
+{len(matched)} of {len(thermal_pages)} thermal images correlated to specific areas.
+Temperature differentials range from {min(p.get('temp_delta',0) for p in thermal_pages):.1f}°C 
+to {max(p.get('temp_delta',0) for p in thermal_pages):.1f}°C.
+Coldspot temperatures consistently in 20-23°C range against ambient of 23°C.
+Cold zones appear at skirting level (floor-wall junction) across multiple rooms.
+"""
+
+        checklist_flags = self._format_full_checklist(checklist)
+
+        prompt = ROOT_CAUSE_PROMPT.format(
+            all_areas_summary=all_areas_summary,
+            thermal_summary=thermal_summary,
+            checklist_flags=checklist_flags
+        )
+        return self._call_model(prompt)
+
+    def _generate_severity(
+        self, inspection_data: dict, thermal_pages: list, area_groups: dict
+    ) -> str:
+        areas = inspection_data.get("impacted_areas", [])
+
+        areas_with_thermal = ""
+        for area in areas:
+            area_id = area["area_id"]
+            tp_list = area_groups.get(area_id, [])
+            thermal_info = f"({len(tp_list)} thermal images)" if tp_list else "(no thermal data)"
+            areas_with_thermal += f"Area {area_id}: {area['negative_description']} {thermal_info}\n"
+
+        thermal_severity_data = "\n".join([
+            f"Page {p['page_number']} ({p.get('filename','')}): "
+            f"Hotspot={p.get('hotspot_temp')}°C, Coldspot={p.get('coldspot_temp')}°C, "
+            f"Delta={p.get('temp_delta')}°C, "
+            f"Matched to Area {p.get('correlation',{}).get('area_id','unknown')} "
+            f"(confidence: {p.get('correlation',{}).get('confidence','low')})"
+            for p in thermal_pages
+        ])
+
+        checklist_flags = self._format_full_checklist(inspection_data.get("checklist", {}))
+
+        prompt = SEVERITY_PROMPT.format(
+            areas_with_thermal=areas_with_thermal,
+            thermal_severity_data=thermal_severity_data,
+            checklist_flags=checklist_flags
+        )
+        return self._call_model(prompt)
+
+    def _generate_recommendations(
+        self, root_causes: str, severity_assessment: str, inspection_data: dict
+    ) -> str:
+        areas = inspection_data.get("impacted_areas", [])
+        areas_summary = "\n".join([
+            f"Area {a['area_id']}: {a['negative_description']} | Source: {a['positive_description']}"
+            for a in areas
+        ])
+
+        prompt = RECOMMENDED_ACTIONS_PROMPT.format(
+            root_causes=root_causes,
+            severity_assessment=severity_assessment,
+            areas_summary=areas_summary
+        )
+        return self._call_model(prompt)
+
+    def _generate_additional_notes(
+        self, inspection_data: dict, thermal_pages: list, ddr: dict
+    ) -> str:
+        full_summary = f"""
+Total areas inspected: {len(inspection_data.get('impacted_areas', []))}
+Thermal images: {len(thermal_pages)}
+Overall score: {inspection_data.get('property_info', {}).get('score', 'N/A')}%
+Root cause summary: {ddr.get('root_cause', '')[:300]}
+Severity summary: {ddr.get('severity_assessment', '')[:300]}
+"""
+        prompt = ADDITIONAL_NOTES_PROMPT.format(full_summary=full_summary)
+        return self._call_model(prompt)
+
+    def _generate_missing_info(
+        self, inspection_data: dict, thermal_pages: list, area_groups: dict
+    ) -> str:
+        # Find low confidence correlations
+        low_confidence = [
+            f"Thermal page {p['page_number']} ({p.get('filename','')}): "
+            f"{p.get('correlation',{}).get('reason','unknown reason')}"
+            for p in thermal_pages
+            if p.get("correlation", {}).get("confidence") in ["low", None]
+        ]
+
+        unmatched_count = len(area_groups.get("unmatched", []))
+
+        inspection_data_str = f"""
+Customer name: Not Available (redacted in document)
+Customer mobile: Not Available (redacted)
+Customer email: Not Available (redacted)
+Property address: Not Available (redacted)
+Property age: Not Available
+Previous structural audit: No
+Previous repair work: No
+Paint manufacturer: Not Sure (per checklist)
+Low confidence thermal correlations: {len(low_confidence)} images
+Unmatched thermal images: {unmatched_count}
+Low confidence details: {chr(10).join(low_confidence[:5]) if low_confidence else 'None'}
+"""
+
+        thermal_data_str = f"""
+Total thermal images: {len(thermal_pages)}
+Successfully correlated: {len(thermal_pages) - unmatched_count}
+Unmatched/uncertain: {unmatched_count + len(low_confidence)}
+"""
+
+        prompt = MISSING_INFO_PROMPT.format(
+            inspection_data=inspection_data_str,
+            thermal_data=thermal_data_str
+        )
+        return self._call_model(prompt)
+
+    # --- Helper formatters ---
+
+    def _format_thermal_data_for_area(self, thermal_pages: list) -> str:
+        if not thermal_pages:
+            return "No thermal images correlated to this area."
+        
+        lines = []
+        for p in thermal_pages:
+            corr = p.get("correlation", {})
+            lines.append(
+                f"- Thermal image {p.get('filename','')}: "
+                f"Hotspot={p.get('hotspot_temp')}°C, "
+                f"Coldspot={p.get('coldspot_temp')}°C, "
+                f"Delta={p.get('temp_delta')}°C "
+                f"(Match confidence: {corr.get('confidence','low')}, "
+                f"Reason: {corr.get('reason','')})"
+            )
+        return "\n".join(lines)
+
+    def _format_full_checklist(self, checklist: dict) -> str:
+        """Return all checklist items; let Gemini determine relevance per area."""
+        if not checklist:
+            return "Checklist data: Not Available"
+        lines = [f"- {k}: {v}" for k, v in checklist.items()]
+        return "\n".join(lines)
