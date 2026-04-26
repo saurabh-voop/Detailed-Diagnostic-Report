@@ -1,13 +1,19 @@
 """
 Stage 3: DDR Generation
-Generates each DDR section using Gemini, section by section.
+Generates each DDR section using GPT-4o-mini, section by section.
 """
 
-import google.generativeai as genai
-import json
+import base64
+import io
+import re
 import time
 import os
 from PIL import Image
+from openai import OpenAI, RateLimitError
+
+_MAX_RETRIES = 3
+_DEFAULT_RETRY_WAIT = 60
+
 from .prompts import (
     SYSTEM_PROMPT, PROPERTY_SUMMARY_PROMPT, AREA_OBSERVATION_PROMPT,
     ROOT_CAUSE_PROMPT, SEVERITY_PROMPT, RECOMMENDED_ACTIONS_PROMPT,
@@ -15,13 +21,23 @@ from .prompts import (
 )
 
 
+def _img_path_to_b64(path: str):
+    ext = os.path.splitext(path)[1].lower().lstrip(".")
+    mime = "image/jpeg" if ext in ("jpg", "jpeg") else f"image/{ext}"
+    with open(path, "rb") as f:
+        return base64.b64encode(f.read()).decode("utf-8"), mime
+
+
+def _pil_to_b64(img: Image.Image):
+    buf = io.BytesIO()
+    img.save(buf, format="JPEG", quality=85)
+    buf.seek(0)
+    return base64.b64encode(buf.read()).decode("utf-8"), "image/jpeg"
+
+
 class DDRGenerator:
-    def __init__(self, api_key: str, model_name: str = "gemini-1.5-flash"):
-        genai.configure(api_key=api_key)
-        self.model = genai.GenerativeModel(
-            model_name,
-            system_instruction=SYSTEM_PROMPT
-        )
+    def __init__(self, api_key: str, model_name: str = "gpt-4o-mini"):
+        self.client = OpenAI(api_key=api_key)
         self.model_name = model_name
 
     def generate_full_ddr(
@@ -42,42 +58,42 @@ class DDRGenerator:
         ddr["property_summary"] = self._generate_property_summary(
             inspection_data, enriched_thermal_pages
         )
-        time.sleep(4)
+        time.sleep(2)
 
         # 2. Area-wise Observations
         print("  [2/7] Area-wise Observations...")
         ddr["area_observations"] = self._generate_area_observations(
             inspection_data, area_groups
         )
-        time.sleep(4)
+        time.sleep(2)
 
         # 3. Probable Root Cause
         print("  [3/7] Probable Root Cause...")
         ddr["root_cause"] = self._generate_root_cause(
             inspection_data, enriched_thermal_pages
         )
-        time.sleep(4)
+        time.sleep(2)
 
         # 4. Severity Assessment
         print("  [4/7] Severity Assessment...")
         ddr["severity_assessment"] = self._generate_severity(
             inspection_data, enriched_thermal_pages, area_groups
         )
-        time.sleep(4)
+        time.sleep(2)
 
         # 5. Recommended Actions
         print("  [5/7] Recommended Actions...")
         ddr["recommended_actions"] = self._generate_recommendations(
             ddr["root_cause"], ddr["severity_assessment"], inspection_data
         )
-        time.sleep(4)
+        time.sleep(2)
 
         # 6. Additional Notes
         print("  [6/7] Additional Notes...")
         ddr["additional_notes"] = self._generate_additional_notes(
             inspection_data, enriched_thermal_pages, ddr
         )
-        time.sleep(4)
+        time.sleep(2)
 
         # 7. Missing or Unclear Information
         print("  [7/7] Missing or Unclear Information...")
@@ -88,26 +104,62 @@ class DDRGenerator:
         return ddr
 
     def _call_model(self, prompt: str, images: list = None) -> str:
-        """Make a model call with optional images."""
-        content_parts = []
-        
+        """Make a model call with optional images, retrying on rate limit errors."""
+        content = []
+
         if images:
             for img in images:
-                if isinstance(img, str) and os.path.exists(img):
-                    try:
-                        content_parts.append(Image.open(img))
-                    except Exception:
-                        pass
-                elif isinstance(img, Image.Image):
-                    content_parts.append(img)
-        
-        content_parts.append(prompt)
-        
-        try:
-            response = self.model.generate_content(content_parts)
-            return response.text.strip()
-        except Exception as e:
-            return f"[Generation error: {str(e)}]"
+                try:
+                    if isinstance(img, str) and os.path.exists(img):
+                        b64, mime = _img_path_to_b64(img)
+                    elif isinstance(img, Image.Image):
+                        b64, mime = _pil_to_b64(img)
+                    else:
+                        continue
+                    content.append({
+                        "type": "image_url",
+                        "image_url": {
+                            "url": f"data:{mime};base64,{b64}",
+                            "detail": "low"
+                        }
+                    })
+                except Exception:
+                    pass
+
+        content.append({"type": "text", "text": prompt})
+
+        messages = [
+            {"role": "system", "content": SYSTEM_PROMPT},
+            {"role": "user", "content": content}
+        ]
+
+        for attempt in range(_MAX_RETRIES):
+            try:
+                response = self.client.chat.completions.create(
+                    model=self.model_name,
+                    messages=messages,
+                    max_tokens=2000
+                )
+                return response.choices[0].message.content.strip()
+
+            except RateLimitError as e:
+                retry_after = getattr(e, "retry_after", None)
+                wait = (int(retry_after) + 5) if retry_after else _DEFAULT_RETRY_WAIT
+                if attempt < _MAX_RETRIES - 1:
+                    print(f"    Rate limited. Waiting {wait}s before retry {attempt + 2}/{_MAX_RETRIES}...")
+                    time.sleep(wait)
+                else:
+                    return f"[Generation error: rate limit exceeded after {_MAX_RETRIES} retries]"
+
+            except Exception as e:
+                err = str(e)
+                if "429" in err and attempt < _MAX_RETRIES - 1:
+                    delay_match = re.search(r'retry[_\-]after[:\s]+(\d+)', err, re.IGNORECASE)
+                    wait = int(delay_match.group(1)) + 5 if delay_match else _DEFAULT_RETRY_WAIT
+                    print(f"    Rate limited (429). Waiting {wait}s before retry {attempt + 2}/{_MAX_RETRIES}...")
+                    time.sleep(wait)
+                else:
+                    return f"[Generation error: {err[:200]}]"
 
     def _generate_property_summary(self, inspection_data: dict, thermal_pages: list) -> str:
         prop_info = inspection_data.get("property_info", {})
@@ -125,11 +177,10 @@ Impacted Rooms: {prop_info.get('impacted_rooms', 'Not Available')}
 Total Issues Identified: {len(summary_table)}
 """
 
-        # Thermal overview
         temp_deltas = [p.get("temp_delta", 0) for p in thermal_pages if p.get("temp_delta")]
         avg_delta = round(sum(temp_deltas) / len(temp_deltas), 1) if temp_deltas else 0
         max_delta = max(temp_deltas) if temp_deltas else 0
-        
+
         thermal_overview = f"""
 Total thermal images captured: {len(thermal_pages)}
 Average temperature differential: {avg_delta}°C
@@ -154,10 +205,7 @@ All images captured on: 27/09/2022
             area_id = area["area_id"]
             thermal_pages_for_area = area_groups.get(area_id, [])
 
-            # Build thermal data string for this area
             thermal_data = self._format_thermal_data_for_area(thermal_pages_for_area)
-
-            # Full checklist — let Gemini pick what's relevant for this area
             checklist_data = self._format_full_checklist(checklist)
 
             prompt = AREA_OBSERVATION_PROMPT.format(
@@ -169,24 +217,19 @@ All images captured on: 27/09/2022
                 checklist_data=checklist_data
             )
 
-            # Collect images for this area
             area_images = []
-            
-            # Add thermal visible images
-            for tp in thermal_pages_for_area[:2]:  # Max 2 thermal images per area
+            for tp in thermal_pages_for_area[:2]:
                 if tp.get("visible_image_path") and os.path.exists(tp["visible_image_path"]):
                     area_images.append(tp["visible_image_path"])
 
-            # Add inspection photos
             photos = inspection_data.get("photos", {})
-            for photo_num in area.get("negative_photos", [])[:3]:  # Max 3 inspection photos
+            for photo_num in area.get("negative_photos", [])[:3]:
                 if photo_num in photos and os.path.exists(photos[photo_num]):
                     area_images.append(photos[photo_num])
 
             text = self._call_model(prompt, area_images)
-            time.sleep(3)
+            time.sleep(2)
 
-            # Collect image paths for this area (for docx assembly)
             all_area_images = {
                 "thermal_images": [
                     {
@@ -227,11 +270,10 @@ All images captured on: 27/09/2022
             for a in areas
         ])
 
-        # Thermal summary
         matched = [p for p in thermal_pages if p.get("correlation", {}).get("area_id")]
         thermal_summary = f"""
 {len(matched)} of {len(thermal_pages)} thermal images correlated to specific areas.
-Temperature differentials range from {min(p.get('temp_delta',0) for p in thermal_pages):.1f}°C 
+Temperature differentials range from {min(p.get('temp_delta',0) for p in thermal_pages):.1f}°C
 to {max(p.get('temp_delta',0) for p in thermal_pages):.1f}°C.
 Coldspot temperatures consistently in 20-23°C range against ambient of 23°C.
 Cold zones appear at skirting level (floor-wall junction) across multiple rooms.
@@ -308,7 +350,6 @@ Severity summary: {ddr.get('severity_assessment', '')[:300]}
     def _generate_missing_info(
         self, inspection_data: dict, thermal_pages: list, area_groups: dict
     ) -> str:
-        # Find low confidence correlations
         low_confidence = [
             f"Thermal page {p['page_number']} ({p.get('filename','')}): "
             f"{p.get('correlation',{}).get('reason','unknown reason')}"
@@ -349,7 +390,7 @@ Unmatched/uncertain: {unmatched_count + len(low_confidence)}
     def _format_thermal_data_for_area(self, thermal_pages: list) -> str:
         if not thermal_pages:
             return "No thermal images correlated to this area."
-        
+
         lines = []
         for p in thermal_pages:
             corr = p.get("correlation", {})
@@ -364,7 +405,6 @@ Unmatched/uncertain: {unmatched_count + len(low_confidence)}
         return "\n".join(lines)
 
     def _format_full_checklist(self, checklist: dict) -> str:
-        """Return all checklist items; let Gemini determine relevance per area."""
         if not checklist:
             return "Checklist data: Not Available"
         lines = [f"- {k}: {v}" for k, v in checklist.items()]

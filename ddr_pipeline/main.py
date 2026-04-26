@@ -1,7 +1,7 @@
 """
 DDR Generation Pipeline - Main Entry Point
 Usage: python main.py --inspection <path> --thermal <path> --api-key <key>
-       OR set GEMINI_API_KEY in .env file
+       OR set OPENAI_API_KEY in .env file
 """
 
 import argparse
@@ -15,7 +15,7 @@ from datetime import datetime
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 from config import (
-    GEMINI_API_KEY, MODEL_NAME,
+    OPENAI_API_KEY, MODEL_NAME,
     INSPECTION_PDF, THERMAL_PDF,
     INSPECTION_PHOTOS_DIR, THERMAL_IMAGES_DIR, OUTPUTS_DIR
 )
@@ -175,7 +175,7 @@ def main():
     parser = argparse.ArgumentParser(description="DDR Generation Pipeline")
     parser.add_argument("--inspection", default=INSPECTION_PDF, help="Path to inspection PDF")
     parser.add_argument("--thermal", default=THERMAL_PDF, help="Path to thermal PDF")
-    parser.add_argument("--api-key", default=GEMINI_API_KEY, help="Gemini API key")
+    parser.add_argument("--api-key", default=OPENAI_API_KEY, help="OpenAI API key")
     parser.add_argument("--output", default=OUTPUTS_DIR, help="Output directory")
     parser.add_argument(
         "--skip-correlation", action="store_true",
@@ -186,7 +186,7 @@ def main():
     args = parser.parse_args()
 
     if not args.api_key:
-        print("ERROR: Gemini API key required. Set GEMINI_API_KEY in .env or pass --api-key")
+        print("ERROR: OpenAI API key required. Set OPENAI_API_KEY in .env or pass --api-key")
         sys.exit(1)
 
     if not os.path.exists(args.inspection):

@@ -1,0 +1,669 @@
+[
+  {
+    "hotspot_temp": 28.8,
+    "coldspot_temp": 23.4,
+    "emissivity": 0.94,
+    "reflected_temp": 23.0,
+    "filename": "RB02380X",
+    "device": "GTC 400 C Professional",
+    "serial_number": "02700034772",
+    "temp_delta": 5.4,
+    "date": "27/09/22",
+    "page_number": 1,
+    "correlation": {
+      "matched_photo": 5,
+      "area_id": 1,
+      "area_description": "Hall Skirting level Dampness",
+      "side": "negative",
+      "confidence": "high",
+      "reason": "Both photos show an internal corner with water staining and discoloration on the walls and a similar floor tile pattern. The angle and the extent of the staining appear to be a very close match.",
+      "alternative_matches": [
+        1,
+        4,
+        10,
+        11,
+        12,
+        14
+      ]
+    }
+  },
+  {
+    "hotspot_temp": 27.4,
+    "coldspot_temp": 22.4,
+    "emissivity": 0.94,
+    "reflected_temp": 23.0,
+    "filename": "RB02386X",
+    "device": "GTC 400 C Professional",
+    "serial_number": "02700034772",
+    "temp_delta": 5.0,
+    "date": "27/09/22",
+    "page_number": 2,
+    "correlation": {
+      "matched_photo": 1,
+      "area_id": 1,
+      "area_description": "Hall Skirting level Dampness",
+      "side": "negative",
+      "confidence": "high",
+      "reason": "Both photos show a corner of a room with a dark door frame on the left. There is significant water staining and discoloration on the lower portion of the wall, with a raised texture in some areas. A slight pinkish hue is visible in the upper portion of the wall in the thermal visible photo, which is also present in photo 1.",
+      "alternative_matches": [
+        10,
+        11
+      ]
+    }
+  },
+  {
+    "hotspot_temp": 27.0,
+    "coldspot_temp": 22.0,
+    "emissivity": 0.94,
+    "reflected_temp": 23.0,
+    "filename": "RB02395X",
+    "device": "GTC 400 C Professional",
+    "serial_number": "02700034772",
+    "temp_delta": 5.0,
+    "date": "27/09/22",
+    "page_number": 3,
+    "correlation": {
+      "matched_photo": 3,
+      "area_id": 1,
+      "area_description": "Hall Skirting level Dampness",
+      "side": "negative",
+      "confidence": "high",
+      "reason": "Both photos show a similar wall with a window at the top. The pattern of staining and discoloration along the bottom of the wall, near the skirting board, is also consistent between the two images. The angle and perspective are also very similar.",
+      "alternative_matches": [
+        2,
+        11
+      ]
+    }
+  },
+  {
+    "hotspot_temp": 25.7,
+    "coldspot_temp": 20.7,
+    "emissivity": 0.94,
+    "reflected_temp": 23.0,
+    "filename": "RB02402X",
+    "device": "GTC 400 C Professional",
+    "serial_number": "02700034772",
+    "temp_delta": 5.0,
+    "date": "27/09/22",
+    "page_number": 4,
+    "correlation": {
+      "matched_photo": 10,
+      "area_id": 1,
+      "area_description": "Common Bathroom tile  hollowness",
+      "side": "positive",
+      "confidence": "high",
+      "reason": "Both photos show a wall with a power outlet, a dark door frame on the left, and similar water damage/paint peeling near the bottom of the wall. The angle and lighting are also very similar.",
+      "alternative_matches": [
+        4,
+        1
+      ]
+    }
+  },
+  {
+    "hotspot_temp": 25.5,
+    "coldspot_temp": 20.5,
+    "emissivity": 0.94,
+    "reflected_temp": 23.0,
+    "filename": "RB02403X",
+    "device": "GTC 400 C Professional",
+    "serial_number": "02700034772",
+    "temp_delta": 5.0,
+    "date": "27/09/22",
+    "page_number": 5,
+    "correlation": {
+      "matched_photo": 4,
+      "area_id": 1,
+      "area_description": "Hall Skirting level Dampness",
+      "side": "negative",
+      "confidence": "high",
+      "reason": "Both photos show the same section of wall with similar water damage at the base. The angle and the presence of a dark vertical element (door frame) on the left align.",
+      "alternative_matches": [
+        1,
+        10
+      ]
+    }
+  },
+  {
+    "hotspot_temp": 25.8,
+    "coldspot_temp": 20.8,
+    "emissivity": 0.94,
+    "reflected_temp": 23.0,
+    "filename": "RB02404X",
+    "device": "GTC 400 C Professional",
+    "serial_number": "02700034772",
+    "temp_delta": 5.0,
+    "date": "27/09/22",
+    "page_number": 6,
+    "correlation": {
+      "matched_photo": 1,
+      "area_id": 1,
+      "area_description": "Hall Skirting level Dampness",
+      "side": "negative",
+      "confidence": "high",
+      "reason": "Both the thermal visible photo and Photo 1 show a wall with similar water staining patterns near the floor, the same tile flooring, and a vertical edge on the left side. Photo 1 also shows a small pipe fitting in a similar location to where one might be expected based on the staining pattern in the thermal photo.",
+      "alternative_matches": [
+        4,
+        10,
+        14
+      ]
+    }
+  },
+  {
+    "hotspot_temp": 26.2,
+    "coldspot_temp": 21.2,
+    "emissivity": 0.94,
+    "reflected_temp": 23.0,
+    "filename": "RB02405X",
+    "device": "GTC 400 C Professional",
+    "serial_number": "02700034772",
+    "temp_delta": 5.0,
+    "date": "27/09/22",
+    "page_number": 7,
+    "correlation": {
+      "matched_photo": 5,
+      "area_id": 1,
+      "area_description": "Hall Skirting level Dampness",
+      "side": "negative",
+      "confidence": "high",
+      "reason": "Both photos show a corner of a room with a white wall and a slightly darker skirting board. There is evidence of staining and discoloration on the wall and skirting board in both images, particularly in the corner. The floor tiling also appears to be the same in both images.",
+      "alternative_matches": [
+        11
+      ]
+    }
+  },
+  {
+    "hotspot_temp": 26.5,
+    "coldspot_temp": 21.5,
+    "emissivity": 0.94,
+    "reflected_temp": 23.0,
+    "filename": "RB02406X",
+    "device": "GTC 400 C Professional",
+    "serial_number": "02700034772",
+    "temp_delta": 5.0,
+    "date": "27/09/22",
+    "page_number": 8,
+    "correlation": {
+      "matched_photo": 5,
+      "area_id": 1,
+      "area_description": "Hall Skirting level Dampness",
+      "side": "negative",
+      "confidence": "high",
+      "reason": "Both photos show a distinct corner where two walls meet. The visible light photo shows discoloration and what appears to be mold or water damage in that corner and along the baseboard, which is also present in inspection photo 5. The texture and pattern of the damage are very similar.",
+      "alternative_matches": [
+        12
+      ]
+    }
+  },
+  {
+    "hotspot_temp": 25.8,
+    "coldspot_temp": 20.8,
+    "emissivity": 0.94,
+    "reflected_temp": 23.0,
+    "filename": "RB02392X",
+    "device": "GTC 400 C Professional",
+    "serial_number": "02700034772",
+    "temp_delta": 5.0,
+    "date": "27/09/22",
+    "page_number": 9,
+    "correlation": {
+      "matched_photo": 4,
+      "area_id": 1,
+      "area_description": "Hall Skirting level Dampness",
+      "side": "negative",
+      "confidence": "high",
+      "reason": "Both photos show a wall with peeling paint and water damage near the baseboard. The pattern and extent of the damage are very similar. The angle of the shot and the presence of a small pipe or fixture also align.",
+      "alternative_matches": [
+        1,
+        10
+      ]
+    }
+  },
+  {
+    "hotspot_temp": 25.9,
+    "coldspot_temp": 20.9,
+    "emissivity": 0.94,
+    "reflected_temp": 23.0,
+    "filename": "RB02393X",
+    "device": "GTC 400 C Professional",
+    "serial_number": "02700034772",
+    "temp_delta": 5.0,
+    "date": "27/09/22",
+    "page_number": 10,
+    "correlation": {
+      "matched_photo": 14,
+      "area_id": null,
+      "area_description": "Not Available",
+      "side": "unknown",
+      "confidence": "high",
+      "reason": "The thermal visible photo and photo 14 show the same wall area with a distinct water stain pattern, electrical outlets at the same height, and similar flooring. The angle and lighting are also very close.",
+      "alternative_matches": [
+        2,
+        11
+      ]
+    }
+  },
+  {
+    "hotspot_temp": 26.0,
+    "coldspot_temp": 21.0,
+    "emissivity": 0.94,
+    "reflected_temp": 23.0,
+    "filename": "RB02394X",
+    "device": "GTC 400 C Professional",
+    "serial_number": "02700034772",
+    "temp_delta": 5.0,
+    "date": "27/09/22",
+    "page_number": 11,
+    "correlation": {
+      "matched_photo": 5,
+      "area_id": 1,
+      "area_description": "Hall Skirting level Dampness",
+      "side": "negative",
+      "confidence": "high",
+      "reason": "Both photos show a corner of a room with similar discoloration and damage patterns on the walls near the baseboard. The texture and distribution of the water marks are consistent between the two images.",
+      "alternative_matches": [
+        1,
+        11
+      ]
+    }
+  },
+  {
+    "hotspot_temp": 26.1,
+    "coldspot_temp": 21.1,
+    "emissivity": 0.94,
+    "reflected_temp": 23.0,
+    "filename": "RB02396X",
+    "device": "GTC 400 C Professional",
+    "serial_number": "02700034772",
+    "temp_delta": 5.0,
+    "date": "27/09/22",
+    "page_number": 12,
+    "correlation": {
+      "matched_photo": 1,
+      "area_id": 1,
+      "area_description": "Hall Skirting level Dampness",
+      "side": "negative",
+      "confidence": "high",
+      "reason": "The thermal visible photo shows water staining and discoloration at the base of a wall, extending upwards slightly. Photo 1 shows a similar wall with identical water staining patterns and the same floor tiles meeting the wall. The angle and the presence of a dark vertical element on the left in Photo 1 also align with the framing of the thermal visible photo.",
+      "alternative_matches": [
+        4,
+        10,
+        14
+      ]
+    }
+  },
+  {
+    "hotspot_temp": 26.3,
+    "coldspot_temp": 21.3,
+    "emissivity": 0.94,
+    "reflected_temp": 23.0,
+    "filename": "RB02397X",
+    "device": "GTC 400 C Professional",
+    "serial_number": "02700034772",
+    "temp_delta": 5.0,
+    "date": "27/09/22",
+    "page_number": 13,
+    "correlation": {
+      "matched_photo": 1,
+      "area_id": 1,
+      "area_description": "Hall Skirting level Dampness",
+      "side": "negative",
+      "confidence": "high",
+      "reason": "Both photos show the same corner of a room with light-colored walls and a dark doorframe on the left. The pattern of water damage and discoloration at the base of the wall is identical. The floor tiles also appear to be the same.",
+      "alternative_matches": [
+        4
+      ]
+    }
+  },
+  {
+    "hotspot_temp": 25.6,
+    "coldspot_temp": 20.6,
+    "emissivity": 0.94,
+    "reflected_temp": 23.0,
+    "filename": "RB02398X",
+    "device": "GTC 400 C Professional",
+    "serial_number": "02700034772",
+    "temp_delta": 5.0,
+    "date": "27/09/22",
+    "page_number": 14,
+    "correlation": {
+      "matched_photo": 11,
+      "area_id": 1,
+      "area_description": "Common Bathroom tile  hollowness",
+      "side": "positive",
+      "confidence": "high",
+      "reason": "The thermal visible photo shows a distinctive pattern of discoloration and texture on the lower portion of a light-colored wall, near the floor. Inspection photo 11 displays the same discoloration pattern, including the prominent gray splotchy area, at the same height and location relative to the corner. The floor tiles also appear to be the same.",
+      "alternative_matches": [
+        14
+      ]
+    }
+  },
+  {
+    "hotspot_temp": 26.5,
+    "coldspot_temp": 21.5,
+    "emissivity": 0.94,
+    "reflected_temp": 23.0,
+    "filename": "RB02399X",
+    "device": "GTC 400 C Professional",
+    "serial_number": "02700034772",
+    "temp_delta": 5.0,
+    "date": "27/09/22",
+    "page_number": 15,
+    "correlation": {
+      "matched_photo": 5,
+      "area_id": 1,
+      "area_description": "Hall Skirting level Dampness",
+      "side": "negative",
+      "confidence": "high",
+      "reason": "Both photos show an interior corner with similar wall discoloration and flooring. The angle and the presence of a baseboard match.",
+      "alternative_matches": [
+        1,
+        11
+      ]
+    }
+  },
+  {
+    "hotspot_temp": 25.2,
+    "coldspot_temp": 20.2,
+    "emissivity": 0.94,
+    "reflected_temp": 23.0,
+    "filename": "RB02400X",
+    "device": "GTC 400 C Professional",
+    "serial_number": "02700034772",
+    "temp_delta": 5.0,
+    "date": "27/09/22",
+    "page_number": 16,
+    "correlation": {
+      "matched_photo": 12,
+      "area_id": null,
+      "area_description": "Not Available",
+      "side": "unknown",
+      "confidence": "high",
+      "reason": "Both photos show a white wall with a white electrical outlet plate containing two switches and an electrical socket. The wall texture and the light color are also consistent. The position of the outlet is similar.",
+      "alternative_matches": []
+    }
+  },
+  {
+    "hotspot_temp": 25.6,
+    "coldspot_temp": 20.6,
+    "emissivity": 0.94,
+    "reflected_temp": 23.0,
+    "filename": "RB02401X",
+    "device": "GTC 400 C Professional",
+    "serial_number": "02700034772",
+    "temp_delta": 5.0,
+    "date": "27/09/22",
+    "page_number": 17,
+    "correlation": {
+      "matched_photo": 1,
+      "area_id": 1,
+      "area_description": "Hall Skirting level Dampness",
+      "side": "negative",
+      "confidence": "high",
+      "reason": "The thermal visible photo shows a wall with staining and discoloration near the baseboard. Inspection photo 1 shows the same wall, floor, and baseboard area with similar staining patterns and texture. The angle and perspective are very close.",
+      "alternative_matches": [
+        10,
+        4,
+        14
+      ]
+    }
+  },
+  {
+    "hotspot_temp": 27.0,
+    "coldspot_temp": 22.0,
+    "emissivity": 0.94,
+    "reflected_temp": 23.0,
+    "filename": "RB02381X",
+    "device": "GTC 400 C Professional",
+    "serial_number": "02700034772",
+    "temp_delta": 5.0,
+    "date": "27/09/22",
+    "page_number": 18,
+    "correlation": {
+      "matched_photo": 1,
+      "area_id": 1,
+      "area_description": "Hall Skirting level Dampness",
+      "side": "negative",
+      "confidence": "high",
+      "reason": "The visible light photo from the thermal inspection shows a white wall with a discolored area at the bottom, consistent with water damage. Inspection photo 1 shows a very similar wall area with matching discoloration patterns near the baseboard, and what appears to be the same type of tiled floor and doorway frame. The angle and lighting are also very similar.",
+      "alternative_matches": [
+        4,
+        10,
+        14
+      ]
+    }
+  },
+  {
+    "hotspot_temp": 26.7,
+    "coldspot_temp": 21.7,
+    "emissivity": 0.94,
+    "reflected_temp": 23.0,
+    "filename": "RB02382X",
+    "device": "GTC 400 C Professional",
+    "serial_number": "02700034772",
+    "temp_delta": 5.0,
+    "date": "27/09/22",
+    "page_number": 19,
+    "correlation": {
+      "matched_photo": 5,
+      "area_id": 1,
+      "area_description": "Hall Skirting level Dampness",
+      "side": "negative",
+      "confidence": "high",
+      "reason": "Both photos show an interior corner of a room with similar discoloration and staining patterns on the walls near the ceiling and down to the baseboard. The angle and lighting also appear consistent.",
+      "alternative_matches": []
+    }
+  },
+  {
+    "hotspot_temp": 26.5,
+    "coldspot_temp": 21.5,
+    "emissivity": 0.94,
+    "reflected_temp": 23.0,
+    "filename": "RB02383X",
+    "device": "GTC 400 C Professional",
+    "serial_number": "02700034772",
+    "temp_delta": 5.0,
+    "date": "27/09/22",
+    "page_number": 20,
+    "correlation": {
+      "matched_photo": 5,
+      "area_id": 1,
+      "area_description": "Hall Skirting level Dampness",
+      "side": "negative",
+      "confidence": "high",
+      "reason": "Both photos show a corner of a room with water damage and discoloration along the bottom of the wall. The pattern of the damage and the presence of a light-colored baseboard are consistent. The angle and framing are also very similar.",
+      "alternative_matches": [
+        1,
+        11
+      ]
+    }
+  },
+  {
+    "hotspot_temp": 27.3,
+    "coldspot_temp": 22.3,
+    "emissivity": 0.94,
+    "reflected_temp": 23.0,
+    "filename": "RB02384X",
+    "device": "GTC 400 C Professional",
+    "serial_number": "02700034772",
+    "temp_delta": 5.0,
+    "date": "27/09/22",
+    "page_number": 21,
+    "correlation": {
+      "matched_photo": 5,
+      "area_id": 1,
+      "area_description": "Hall Skirting level Dampness",
+      "side": "negative",
+      "confidence": "high",
+      "reason": "The thermal visible photo shows water staining and discoloration in the corner of a room near the floor, with what appears to be mold growth. Photo 5 shows a very similar corner with comparable water staining and discoloration patterns on the wall and baseboard.",
+      "alternative_matches": [
+        1,
+        11
+      ]
+    }
+  },
+  {
+    "hotspot_temp": 27.3,
+    "coldspot_temp": 22.3,
+    "emissivity": 0.94,
+    "reflected_temp": 23.0,
+    "filename": "RB02385X",
+    "device": "GTC 400 C Professional",
+    "serial_number": "02700034772",
+    "temp_delta": 5.0,
+    "date": "27/09/22",
+    "page_number": 22,
+    "correlation": {
+      "matched_photo": 32,
+      "area_id": 4,
+      "area_description": "Kitchen Skirting level  Dampness",
+      "side": "negative",
+      "confidence": "high",
+      "reason": "Both the thermal visible photo and inspection photo 32 show a ceiling with significant water damage, including discoloration, peeling paint, and staining. The pattern of the damage and the texture of the ceiling appear to be the same.",
+      "alternative_matches": []
+    }
+  },
+  {
+    "hotspot_temp": 25.2,
+    "coldspot_temp": 20.2,
+    "emissivity": 0.94,
+    "reflected_temp": 23.0,
+    "filename": "RB02387X",
+    "device": "GTC 400 C Professional",
+    "serial_number": "02700034772",
+    "temp_delta": 5.0,
+    "date": "27/09/22",
+    "page_number": 23,
+    "correlation": {
+      "matched_photo": null,
+      "area_id": null,
+      "confidence": "low",
+      "reason": "No match found across all batches"
+    }
+  },
+  {
+    "hotspot_temp": 25.1,
+    "coldspot_temp": 20.1,
+    "emissivity": 0.94,
+    "reflected_temp": 23.0,
+    "filename": "RB02388X",
+    "device": "GTC 400 C Professional",
+    "serial_number": "02700034772",
+    "temp_delta": 5.0,
+    "date": "27/09/22",
+    "page_number": 24,
+    "correlation": {
+      "matched_photo": null,
+      "area_id": null,
+      "confidence": "low",
+      "reason": "No match found across all batches"
+    }
+  },
+  {
+    "hotspot_temp": 25.9,
+    "coldspot_temp": 20.9,
+    "emissivity": 0.94,
+    "reflected_temp": 23.0,
+    "filename": "RB02389X",
+    "device": "GTC 400 C Professional",
+    "serial_number": "02700034772",
+    "temp_delta": 5.0,
+    "date": "27/09/22",
+    "page_number": 25,
+    "correlation": {
+      "matched_photo": null,
+      "area_id": null,
+      "confidence": "low",
+      "reason": "No match found across all batches"
+    }
+  },
+  {
+    "hotspot_temp": 26.9,
+    "coldspot_temp": 21.9,
+    "emissivity": 0.94,
+    "reflected_temp": 23.0,
+    "filename": "RB02390X",
+    "device": "GTC 400 C Professional",
+    "serial_number": "02700034772",
+    "temp_delta": 5.0,
+    "date": "27/09/22",
+    "page_number": 26,
+    "correlation": {
+      "matched_photo": null,
+      "area_id": null,
+      "confidence": "low",
+      "reason": "No match found across all batches"
+    }
+  },
+  {
+    "hotspot_temp": 25.6,
+    "coldspot_temp": 20.6,
+    "emissivity": 0.94,
+    "reflected_temp": 23.0,
+    "filename": "RB02391X",
+    "device": "GTC 400 C Professional",
+    "serial_number": "02700034772",
+    "temp_delta": 5.0,
+    "date": "27/09/22",
+    "page_number": 27,
+    "correlation": {
+      "matched_photo": null,
+      "area_id": null,
+      "confidence": "low",
+      "reason": "No match found across all batches"
+    }
+  },
+  {
+    "hotspot_temp": 26.9,
+    "coldspot_temp": 21.9,
+    "emissivity": 0.94,
+    "reflected_temp": 23.0,
+    "filename": "RB02377X",
+    "device": "GTC 400 C Professional",
+    "serial_number": "02700034772",
+    "temp_delta": 5.0,
+    "date": "27/09/22",
+    "page_number": 28,
+    "correlation": {
+      "matched_photo": null,
+      "area_id": null,
+      "confidence": "low",
+      "reason": "No match found across all batches"
+    }
+  },
+  {
+    "hotspot_temp": 26.4,
+    "coldspot_temp": 21.4,
+    "emissivity": 0.94,
+    "reflected_temp": 23.0,
+    "filename": "RB02378X",
+    "device": "GTC 400 C Professional",
+    "serial_number": "02700034772",
+    "temp_delta": 5.0,
+    "date": "27/09/22",
+    "page_number": 29,
+    "correlation": {
+      "matched_photo": null,
+      "area_id": null,
+      "confidence": "low",
+      "reason": "No match found across all batches"
+    }
+  },
+  {
+    "hotspot_temp": 27.8,
+    "coldspot_temp": 22.8,
+    "emissivity": 0.94,
+    "reflected_temp": 23.0,
+    "filename": "RB02379X",
+    "device": "GTC 400 C Professional",
+    "serial_number": "02700034772",
+    "temp_delta": 5.0,
+    "date": "27/09/22",
+    "page_number": 30,
+    "correlation": {
+      "matched_photo": null,
+      "area_id": null,
+      "confidence": "low",
+      "reason": "No match found across all batches"
+    }
+  }
+]

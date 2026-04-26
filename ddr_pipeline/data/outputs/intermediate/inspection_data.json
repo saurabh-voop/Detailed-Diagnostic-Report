@@ -1,0 +1,210 @@
+{
+  "property_info": {
+    "inspection_date": "27.09.2022 14:28 IST",
+    "inspected_by": "Krushna & Mahesh",
+    "property_type": "Flat",
+    "previous_structural_audit": "No",
+    "previous_repair_work": "No",
+    "impacted_rooms": "Not Available",
+    "score": 85.71,
+    "floors": 11,
+    "flagged_items": 1
+  },
+  "impacted_areas": [
+    {
+      "area_id": 1,
+      "negative_description": "Hall Skirting level Dampness",
+      "positive_description": "Common Bathroom tile  hollowness",
+      "negative_photos": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "positive_photos": [
+        8,
+        9,
+        10,
+        11
+      ]
+    },
+    {
+      "area_id": 2,
+      "negative_description": "Bedroom Skirting level  Dampness",
+      "positive_description": "Common Bathroom tile  hollowness",
+      "negative_photos": [],
+      "positive_photos": [
+        15,
+        16,
+        17,
+        18,
+        19
+      ]
+    },
+    {
+      "area_id": 3,
+      "negative_description": "Master bedroom Skirting level  Dampness",
+      "positive_description": "MB Bathroom tile hollowness",
+      "negative_photos": [
+        20,
+        21,
+        22,
+        23,
+        24,
+        25
+      ],
+      "positive_photos": [
+        26,
+        27,
+        28,
+        29,
+        30
+      ]
+    },
+    {
+      "area_id": 4,
+      "negative_description": "Kitchen Skirting level  Dampness",
+      "positive_description": "Master bedroom bathroom",
+      "negative_photos": [
+        31,
+        32
+      ],
+      "positive_photos": [
+        33,
+        34,
+        35,
+        36,
+        37
+      ]
+    },
+    {
+      "area_id": 5,
+      "negative_description": "Master bedroom wall damness",
+      "positive_description": "External wall crack and Duct  Issue",
+      "negative_photos": [
+        38,
+        39,
+        40,
+        41
+      ],
+      "positive_photos": [
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48
+      ]
+    },
+    {
+      "area_id": 6,
+      "negative_description": "Parking Area seepage",
+      "positive_description": "Common Bathroom tile  hollowness and plumbing issue",
+      "negative_photos": [
+        49,
+        50,
+        51,
+        52
+      ],
+      "positive_photos": [
+        53,
+        54,
+        55,
+        56,
+        57
+      ]
+    },
+    {
+      "area_id": 7,
+      "negative_description": "Common Bathroom Ceiling  Dampness",
+      "positive_description": "Flat no 203 tile joint open and",
+      "negative_photos": [
+        58
+      ],
+      "positive_photos": [
+        59,
+        60,
+        61,
+        62,
+        63,
+        64
+      ]
+    }
+  ],
+  "checklist": {
+    "Leakage during": "All time",
+    "Leakage due to concealed plumbing": "Yes",
+    "tile flooring": "Yes",
+    "Positive Side Inputs For WC": "100%",
+    "Gaps/Blackish dirt Observed in tile joints": "Yes",
+    "Gaps around Nahani Trap Joints": "Yes",
+    "Tiles Broken/Loosed anywhere": "No",
+    "Loose Plumbing joints/rust around joints and edges (Flush": "Yes",
+    "Negative Side Inputs For External Wall": "75%",
+    "Internal WC/Bath/Balcony leakage observed": "Yes",
+    "Positive Side Inputs for External Wall": "100%",
+    "Existing type of paint and manufacturer": "Not sure",
+    "Stuctural Condition of RCC Members": "100%",
+    "1 flagged, 84.21%": "Moderate",
+    "Condition of cracks observed on RCC Column and Beam": "Moderate",
+    "Condition of rust marks observed in RCC Beam and Column": "N/A",
+    "reinforcement observed in column/beams/roof slab ceiling": "N/A",
+    "Expansion joints condition if any": "N/A",
+    "Condition of External wall": "100%",
+    "surface?": "Moderate",
+    "Are the sealants applied on the window frame joints intact?": "N/A",
+    "parapet wall observed?": "N/A",
+    "Moderate": "N/A",
+    "Condition of Adhesion of old paint": "100%",
+    "Chalking and flaking in paint film.": "N/A",
+    "Algae fungus and Moss observed on external wall?": "Moderate",
+    "Bird droppings condition observed on external wall and Chajja": "N/A",
+    "Condition of corrosion on metal rods and MS window grills": "N/A",
+    "Patchwork plaster required? if yes its condition?": "N/A",
+    "Entire replaster required? if yes its condition?": "N/A",
+    "Condition of separation cracks observed at beam-column": "N/A",
+    "Condition of leakage observed from overhead water tank": "N/A"
+  },
+  "summary_table": [
+    {
+      "point": 1,
+      "impacted_area": "Observed dampness at the skirting level of Hall of Flat No. 103",
+      "exposed_area": "Observed gaps between the tile joints of Common Bathroom of Flat No. 103"
+    },
+    {
+      "point": 2,
+      "impacted_area": "Observed dampness at the skirting level of the Common Bedroom of Flat No. 103",
+      "exposed_area": "Observed gaps between the tile joints of Common Bathroom of Flat No. 103"
+    },
+    {
+      "point": 3,
+      "impacted_area": "Observed dampness at the skirting level of Master Bedroom of Flat No. 103",
+      "exposed_area": "Observed gaps between the tile joints of Master Bedroom Bathroom of Flat No. 103"
+    },
+    {
+      "point": 4,
+      "impacted_area": "Observed dampness at the skirting level of Kitchen of Flat No. 103",
+      "exposed_area": "Observed gaps between the tile joints of Master Bedroom Bathroom of Flat No. 103"
+    },
+    {
+      "point": 5,
+      "impacted_area": "Observed dampness & efflorescence on the wall surface of Master Bedroom of Flat No. 103",
+      "exposed_area": "Observed cracks on the External wall of building near Master Bedroom of Flat No. 103"
+    },
+    {
+      "point": 6,
+      "impacted_area": "Observed leakage at the Parking ceiling below Flat No. 103",
+      "exposed_area": "Observed plumbing issue & gaps between the tile joints of Common Bathroom of Flat No. 103"
+    },
+    {
+      "point": 7,
+      "impacted_area": "Observed mild dampness at the ceiling of Common Bathroom of Flat No. 103",
+      "exposed_area": "Observed gap between tile joints of Common & Master Bedroom Bathrooms of Flat No. 203."
+    }
+  ],
+  "photo_count": 40
+}

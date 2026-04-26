@@ -4,7 +4,8 @@ from dotenv import load_dotenv
 load_dotenv()
 
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
-MODEL_NAME = "gemini-1.5-flash"
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+MODEL_NAME = "gpt-4o-mini"
 
 # Paths
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
