@@ -63,7 +63,7 @@ class DDRGenerator:
         # 2. Area-wise Observations
         print("  [2/7] Area-wise Observations...")
         ddr["area_observations"] = self._generate_area_observations(
-            inspection_data, area_groups
+            inspection_data, area_groups, total_thermal_count=len(enriched_thermal_pages)
         )
         time.sleep(2)
 
@@ -164,6 +164,25 @@ class DDRGenerator:
     def _generate_property_summary(self, inspection_data: dict, thermal_pages: list) -> str:
         prop_info = inspection_data.get("property_info", {})
         summary_table = inspection_data.get("summary_table", [])
+        # If impacted_rooms not set, derive from impacted_areas
+        impacted_rooms = prop_info.get('impacted_rooms', 'Not Available')
+        if impacted_rooms in (None, '', 'Not Available'):
+            names = []
+            for a in inspection_data.get('impacted_areas', []):
+                desc = a.get('negative_description') or a.get('positive_description') or ''
+                m = None
+                try:
+                    import re
+                    m = re.match(r'^(.*?)(?:\bSkirting\b|\bWall\b|\bCeiling\b|\bSeepage\b|\bDampness\b|\blevel\b)', desc, re.IGNORECASE)
+                except Exception:
+                    m = None
+                if m:
+                    name = m.group(1).strip()
+                else:
+                    name = ' '.join(desc.split()[:2]).strip()
+                if name:
+                    names.append(name)
+            impacted_rooms = ', '.join(sorted(set(names))) if names else 'Not Available'
 
         inspection_summary = f"""
 Property Type: {prop_info.get('property_type', 'Flat')}
@@ -173,7 +192,7 @@ Inspected By: {prop_info.get('inspected_by', 'Not Available')}
 Overall Score: {prop_info.get('score', 'Not Available')}%
 Previous Structural Audit: {prop_info.get('previous_structural_audit', 'No')}
 Previous Repair Work: {prop_info.get('previous_repair_work', 'No')}
-Impacted Rooms: {prop_info.get('impacted_rooms', 'Not Available')}
+Impacted Rooms: {impacted_rooms}
 Total Issues Identified: {len(summary_table)}
 """
 
@@ -196,7 +215,7 @@ All images captured on: 27/09/2022
         )
         return self._call_model(prompt)
 
-    def _generate_area_observations(self, inspection_data: dict, area_groups: dict) -> list:
+    def _generate_area_observations(self, inspection_data: dict, area_groups: dict, total_thermal_count: int = 0) -> list:
         areas = inspection_data.get("impacted_areas", [])
         checklist = inspection_data.get("checklist", {})
         observations = []
@@ -260,6 +279,15 @@ All images captured on: 27/09/2022
                 "images": all_area_images,
                 "thermal_count": len(thermal_pages_for_area)
             })
+            # Add warning if proportion of thermal images assigned to this area is unusually large
+            try:
+                if total_thermal_count and len(thermal_pages_for_area) > 0.5 * total_thermal_count:
+                    observations[-1]["correlation_warning"] = (
+                        f"High share of thermal images assigned ({len(thermal_pages_for_area)}/{total_thermal_count}). "
+                        "Please verify correlation quality and model confidence for these matches."
+                    )
+            except Exception:
+                pass
 
         return observations
 

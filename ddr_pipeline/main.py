@@ -58,6 +58,30 @@ def run_pipeline(
 
     print("  Extracting inspection report...")
     inspection_data = extract_inspection_report(inspection_pdf, INSPECTION_PHOTOS_DIR)
+    # Ensure impacted_rooms is populated from parsed impacted areas when missing
+    def _derive_impacted_rooms(impacted_areas: list) -> str:
+        names = []
+        for a in impacted_areas:
+            desc = a.get('negative_description') or a.get('positive_description') or ''
+            m = None
+            try:
+                import re
+                m = re.match(r'^(.*?)(?:\bSkirting\b|\bWall\b|\bCeiling\b|\bSeepage\b|\bDampness\b|\blevel\b)', desc, re.IGNORECASE)
+            except Exception:
+                m = None
+            if m:
+                name = m.group(1).strip()
+            else:
+                # fallback: first two words
+                name = ' '.join(desc.split()[:2]).strip()
+            if name:
+                names.append(name)
+        return ', '.join(sorted(set(names))) if names else 'Not Available'
+
+    if inspection_data.get('property_info', {}).get('impacted_rooms', 'Not Available') in (None, '', 'Not Available'):
+        inspection_data.setdefault('property_info', {})
+        inspection_data['property_info']['impacted_rooms'] = _derive_impacted_rooms(inspection_data.get('impacted_areas', []))
+
     print(f"  ✓ Inspection: {len(inspection_data['impacted_areas'])} areas, "
           f"{len(inspection_data['photos'])} photos extracted")
 
