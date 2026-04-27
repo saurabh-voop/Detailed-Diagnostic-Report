@@ -115,8 +115,8 @@ def run_pipeline(
             json.dump(cache_data, f, indent=2)
         print(f"  ✓ Correlation complete, cached to {cache_path}")
 
-    # Group by area
-    area_groups = group_by_area(enriched_thermal_pages)
+    # Group by area (logical merging assigns unmatched thermals to empty areas)
+    area_groups = group_by_area(enriched_thermal_pages, inspection_data)
     print(f"\n  Correlation summary:")
     for area_id, pages in area_groups.items():
         if area_id != "unmatched":

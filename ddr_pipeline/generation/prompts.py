@@ -8,12 +8,14 @@ Your job is to convert raw inspection data into clear, client-friendly reports.
 
 Rules you MUST follow:
 1. Only use facts present in the provided data - do NOT invent information
-2. If information is missing, write "Not Available"  
+2. Only write "Not Available" if the information is genuinely absent from the source data
 3. If data conflicts, explicitly state the conflict
 4. Use simple language that a non-technical property owner can understand
 5. Avoid excessive jargon - explain technical terms when used
 6. Be specific: mention exact room names, temperatures, photo references
-7. Keep severity assessments grounded in the actual data provided"""
+7. Keep severity assessments grounded in the actual data provided
+8. Always scan ALL provided data fields before writing — never mark something
+   "Not Available" if it appears anywhere in the data given to you"""
 
 
 PROPERTY_SUMMARY_PROMPT = """Based on the inspection data below, write a Property Issue Summary section for a DDR report.
@@ -36,8 +38,17 @@ Use plain English. No bullet points. Write as flowing paragraphs."""
 AREA_OBSERVATION_PROMPT = """Write the Area-wise Observation section for Area {area_id}: {area_description}
 
 INSPECTION FINDINGS:
-Negative Side (Impacted Area): {negative_description}
-Positive Side (Source Area): {positive_description}
+Negative Side (Impacted/Damaged Area): {negative_description}
+  Photos documenting damage: {negative_photos}
+
+Positive Side (Source of Problem): {positive_description}
+  Photos documenting source: {positive_photos}
+
+POSITIVE→NEGATIVE CAUSAL LINK:
+The issue on the Positive Side (source: {positive_description}) is CAUSING the damage
+visible on the Negative Side ({negative_description}). You MUST explicitly describe
+this cause-and-effect relationship in your observation — e.g., "The defects at the
+source location above/adjacent are allowing moisture to migrate and appear as..."
 
 THERMAL DATA FOR THIS AREA:
 {thermal_data}
@@ -46,18 +57,19 @@ CHECKLIST FINDINGS:
 {checklist_data}
 
 Write a clear observation covering:
-1. What was visually observed (dampness, cracks, staining etc.)
-2. What thermal imaging revealed (temperatures, cold zones)
-3. Connection between the visible symptoms and thermal findings
-4. Which specific photos document this
+1. What was visually observed at the NEGATIVE side (dampness, cracks, staining, etc.)
+2. What was found at the POSITIVE side (source of water/moisture entry)
+3. The causal connection — how the positive-side defect creates the negative-side symptom
+4. What thermal imaging revealed (temperatures, cold zones confirming moisture presence)
+5. Which specific photo numbers document each finding
 
-Keep language simple and factual. Reference photo numbers where relevant.
+Keep language simple and factual. Always reference the actual photo numbers listed above.
 Format: Start with "**Area {area_id}: {area_description}**" then write 2-3 paragraphs."""
 
 
 ROOT_CAUSE_PROMPT = """Based on ALL the inspection findings below, identify the probable root causes of the issues.
 
-ALL IMPACTED AREAS SUMMARY:
+ALL IMPACTED AREAS — POSITIVE (SOURCE) → NEGATIVE (DAMAGE) MAPPING:
 {all_areas_summary}
 
 THERMAL FINDINGS SUMMARY:
@@ -67,12 +79,13 @@ CHECKLIST FLAGS:
 {checklist_flags}
 
 Identify and explain:
-1. Primary root cause(s) - what is actually causing the dampness/leakage
-2. Secondary contributing factors
-3. How issues in different areas are likely connected
+1. Primary root cause(s) — what is actually causing moisture entry at the source (positive) sides
+2. How moisture travels from the positive (source) side to create visible damage on the negative side
+3. Cross-area connections — e.g., "The gaps in the Master Bedroom Bathroom (positive side)
+   allow water to seep through the slab, appearing as dampness in the Kitchen below (negative side)"
+4. Secondary contributing factors (material failure, lack of waterproofing, etc.)
 
-Be specific about the cause-and-effect chain. 
-Example: "The dampness observed at skirting level in multiple rooms is caused by..."
+Be explicit about the positive-to-negative moisture pathway in each case.
 Write as clear paragraphs, not just a list."""
 
 
@@ -118,7 +131,7 @@ Provide recommendations in order of priority:
 For each recommendation:
 - State what needs to be done in plain language
 - Explain why it will solve the problem
-- Note which areas it addresses
+- Note which areas (positive and negative sides) it addresses
 
 Do not recommend specific product brands or give cost estimates."""
 
@@ -145,16 +158,21 @@ INSPECTION DATA:
 THERMAL DATA:
 {thermal_data}
 
+IMPORTANT: Before listing anything as "Not Available", check whether it appears anywhere
+in the data provided to you above. Only flag items that are genuinely absent.
+
 List any:
 1. Information explicitly marked as "Not Available" or "N/A" in the source documents
-2. Photo correlations that could not be confidently established
-3. Areas mentioned but not fully documented
-4. Conflicting data between the inspection report and thermal report
-5. Standard inspection items that were not assessed
+2. Photo correlations that could not be confidently established (confidence = "low")
+3. Thermal images assigned by logical merging rather than visual match (confidence = "logical")
+4. Areas mentioned but not fully documented
+5. Conflicting data between the inspection report and thermal report
+6. Standard inspection items that were not assessed
 
 For each item, clearly state:
 - What information is missing
 - Why it matters (what decision it affects)
 - Whether it can be obtained with a follow-up inspection
 
-Write "Not Available" for each missing item rather than leaving blanks."""
+Write "Not Available" only for each item that is genuinely missing — do not flag data
+that is present in the provided fields above."""

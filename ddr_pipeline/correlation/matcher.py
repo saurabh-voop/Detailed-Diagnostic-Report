@@ -32,15 +32,21 @@ def _pil_to_b64(img: Image.Image):
     return base64.b64encode(buf.read()).decode("utf-8"), "image/jpeg"
 
 
+_CONFIDENCE_RANK = {"high": 3, "medium": 2, "low": 1}
+
+
 def build_correlation_map(
     thermal_pages: list,
     inspection_data: dict,
     api_key: str,
-    model_name: str = "gpt-4o-mini"
+    model_name: str = "gpt-4o"
 ) -> list:
     """
     For each thermal page, find which inspection report photo its visible-light
     photo matches, then map to the corresponding impacted area.
+
+    Batches by area (not sequentially) so later areas are not skipped by
+    early high-confidence matches in batch 1.
 
     Returns enriched thermal_pages list with correlation data added.
     """
@@ -65,16 +71,27 @@ def build_correlation_map(
                 "side": "positive"
             }
 
-    print(f"\nStarting correlation for {len(thermal_pages)} thermal pages...")
+    # Build per-area photo lists for area-based batching
+    area_photo_map = {}
+    for area in impacted_areas:
+        all_area_photos = area.get("negative_photos", []) + area.get("positive_photos", [])
+        existing = [p for p in all_area_photos if p in inspection_photos]
+        if existing:
+            area_photo_map[area["area_id"]] = existing
+
+    print(f"\nStarting correlation for {len(thermal_pages)} thermal pages "
+          f"across {len(area_photo_map)} areas...")
 
     enriched_pages = []
     for i, thermal_page in enumerate(thermal_pages):
-        print(f"  Correlating thermal page {i+1}/{len(thermal_pages)}...")
+        print(f"  Correlating thermal page {i+1}/{len(thermal_pages)} "
+              f"({thermal_page.get('filename', 'unknown')})...")
 
         correlation = _correlate_single_page(
             thermal_page=thermal_page,
             inspection_photos=inspection_photos,
             photo_to_area=photo_to_area,
+            area_photo_map=area_photo_map,
             client=client,
             model_name=model_name,
             page_index=i
@@ -93,14 +110,15 @@ def _correlate_single_page(
     thermal_page: dict,
     inspection_photos: dict,
     photo_to_area: dict,
+    area_photo_map: dict,
     client,
     model_name: str,
     page_index: int
 ) -> dict:
     """
-    Use GPT-4o-mini vision to match a thermal page's visible-light photo
-    to the most similar inspection photo, searching in batches of BATCH_SIZE.
-    Returns the best match found across all batches.
+    Match a thermal visible-light photo to inspection photos by comparing
+    against each area's photos in turn.  Evaluates ALL areas before deciding
+    so a strong-but-wrong match in Area 1 does not shadow the correct area.
     """
     visible_path = thermal_page.get("visible_image_path")
 
@@ -122,39 +140,32 @@ def _correlate_single_page(
             "reason": f"Could not load visible image: {e}"
         }
 
-    photo_numbers = sorted(inspection_photos.keys())
-    batches = [
-        photo_numbers[i:i + BATCH_SIZE]
-        for i in range(0, len(photo_numbers), BATCH_SIZE)
-    ]
-
     best = {
         "matched_photo": None,
         "area_id": None,
         "confidence": "low",
-        "reason": "No match found across all batches"
+        "reason": "No match found across all areas"
     }
 
-    for batch_nums in batches:
-        result = _correlate_batch(
-            thermal_visible_img=thermal_visible_img,
-            batch_photo_nums=batch_nums,
-            inspection_photos=inspection_photos,
-            photo_to_area=photo_to_area,
-            client=client,
-            model_name=model_name,
-            page_index=page_index,
-            filename=thermal_page.get("filename", "unknown")
-        )
+    # Search area by area so every area gets evaluated
+    for area_id, area_photo_nums in area_photo_map.items():
+        for batch_start in range(0, len(area_photo_nums), BATCH_SIZE):
+            batch_nums = area_photo_nums[batch_start:batch_start + BATCH_SIZE]
+            result = _correlate_batch(
+                thermal_visible_img=thermal_visible_img,
+                batch_photo_nums=batch_nums,
+                inspection_photos=inspection_photos,
+                photo_to_area=photo_to_area,
+                client=client,
+                model_name=model_name,
+                page_index=page_index,
+                filename=thermal_page.get("filename", "unknown")
+            )
 
-        if result["confidence"] == "high":
-            return result
-        if result["confidence"] == "medium" and best["confidence"] != "high":
-            best = result
-        elif result["matched_photo"] and best["confidence"] == "low":
-            best = result
+            if _CONFIDENCE_RANK.get(result["confidence"], 0) > _CONFIDENCE_RANK.get(best["confidence"], 0):
+                best = result
 
-        time.sleep(3)
+            time.sleep(3)
 
     return best
 
@@ -343,9 +354,11 @@ def _call_with_retry(
     }
 
 
-def group_by_area(enriched_thermal_pages: list) -> dict:
+def group_by_area(enriched_thermal_pages: list, inspection_data: dict = None) -> dict:
     """
     Group enriched thermal pages by their matched impacted area.
+    Applies logical merging: distributes unmatched thermal images to areas
+    that have no visual matches, using temperature delta similarity.
     Returns: {area_id: [thermal_page, ...]}
     """
     area_groups = {}
@@ -356,13 +369,45 @@ def group_by_area(enriched_thermal_pages: list) -> dict:
         area_id = correlation.get("area_id")
 
         if area_id is not None:
-            if area_id not in area_groups:
-                area_groups[area_id] = []
-            area_groups[area_id].append(page)
+            area_groups.setdefault(area_id, []).append(page)
         else:
             unmatched.append(page)
 
-    if unmatched:
+    # Logical merging: assign unmatched thermal images to areas with no thermal data
+    if unmatched and inspection_data:
+        impacted_areas = inspection_data.get("impacted_areas", [])
+        empty_area_ids = [
+            a["area_id"] for a in impacted_areas
+            if a["area_id"] not in area_groups
+        ]
+        if empty_area_ids:
+            # Sort unmatched by temp_delta descending (highest severity first)
+            unmatched_sorted = sorted(
+                unmatched,
+                key=lambda p: p.get("temp_delta", 0),
+                reverse=True
+            )
+            # Round-robin distribute to areas lacking thermal data
+            for i, page in enumerate(unmatched_sorted):
+                target_area = empty_area_ids[i % len(empty_area_ids)]
+                page = dict(page)
+                page["correlation"] = dict(page.get("correlation", {}))
+                page["correlation"]["area_id"] = target_area
+                page["correlation"]["confidence"] = "logical"
+                page["correlation"]["reason"] = (
+                    page["correlation"].get("reason", "") +
+                    f" [Logically assigned to Area {target_area} — no visual match found "
+                    f"but area had no other thermal data]"
+                )
+                area_groups.setdefault(target_area, []).append(page)
+            # Keep remaining unmatched (if more unmatched than empty areas, extras stay unmatched)
+            remaining = unmatched_sorted[len(empty_area_ids):]
+            if remaining:
+                area_groups["unmatched"] = remaining
+        else:
+            area_groups["unmatched"] = unmatched
+
+    elif unmatched:
         area_groups["unmatched"] = unmatched
 
     return area_groups

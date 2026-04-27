@@ -213,6 +213,8 @@ All images captured on: 27/09/2022
                 area_description=area["negative_description"],
                 negative_description=area["negative_description"],
                 positive_description=area["positive_description"],
+                negative_photos=", ".join(f"Photo {n}" for n in area.get("negative_photos", [])) or "Not listed",
+                positive_photos=", ".join(f"Photo {n}" for n in area.get("positive_photos", [])) or "Not listed",
                 thermal_data=thermal_data,
                 checklist_data=checklist_data
             )
@@ -266,7 +268,11 @@ All images captured on: 27/09/2022
         checklist = inspection_data.get("checklist", {})
 
         all_areas_summary = "\n".join([
-            f"Area {a['area_id']}: {a['negative_description']} | Source: {a['positive_description']}"
+            f"Area {a['area_id']}:\n"
+            f"  NEGATIVE (damage visible here): {a['negative_description']} "
+            f"  [Photos: {', '.join(str(p) for p in a.get('negative_photos', []))}]\n"
+            f"  POSITIVE (source of problem): {a['positive_description']} "
+            f"  [Photos: {', '.join(str(p) for p in a.get('positive_photos', []))}]"
             for a in areas
         ])
 
@@ -350,32 +356,56 @@ Severity summary: {ddr.get('severity_assessment', '')[:300]}
     def _generate_missing_info(
         self, inspection_data: dict, thermal_pages: list, area_groups: dict
     ) -> str:
+        prop_info = inspection_data.get("property_info", {})
+        checklist = inspection_data.get("checklist", {})
+
         low_confidence = [
             f"Thermal page {p['page_number']} ({p.get('filename','')}): "
             f"{p.get('correlation',{}).get('reason','unknown reason')}"
             for p in thermal_pages
             if p.get("correlation", {}).get("confidence") in ["low", None]
         ]
+        logical_assignments = [
+            f"Thermal page {p['page_number']} ({p.get('filename','')}): "
+            f"assigned to Area {p.get('correlation',{}).get('area_id')} by logical merging"
+            for p in thermal_pages
+            if p.get("correlation", {}).get("confidence") == "logical"
+        ]
 
         unmatched_count = len(area_groups.get("unmatched", []))
 
+        # Use actual extracted values — only fall back to "Not Available" when genuinely missing
+        def _val(key):
+            v = prop_info.get(key, "Not Available")
+            return v if v else "Not Available"
+
         inspection_data_str = f"""
-Customer name: Not Available (redacted in document)
+Property Type: {_val('property_type')}
+Inspection Date: {_val('inspection_date')}
+Inspected By: {_val('inspected_by')}
+Floors in Building: {_val('floors')}
+Overall Score: {_val('score')}%
+Previous Structural Audit: {_val('previous_structural_audit')}
+Previous Repair Work: {_val('previous_repair_work')}
+Impacted Rooms: {_val('impacted_rooms')}
+Total Impacted Areas: {len(inspection_data.get('impacted_areas', []))}
+Customer name: Not Available (redacted in document for privacy)
 Customer mobile: Not Available (redacted)
 Customer email: Not Available (redacted)
 Property address: Not Available (redacted)
 Property age: Not Available
-Previous structural audit: No
-Previous repair work: No
-Paint manufacturer: Not Sure (per checklist)
+Paint manufacturer: {checklist.get('Paint manufacturer', checklist.get('Paint Manufacturer', 'Not Sure (per checklist)'))}
 Low confidence thermal correlations: {len(low_confidence)} images
-Unmatched thermal images: {unmatched_count}
+Logically assigned (no visual match): {len(logical_assignments)} images
+Unmatched thermal images (no area): {unmatched_count}
 Low confidence details: {chr(10).join(low_confidence[:5]) if low_confidence else 'None'}
+Logical assignment details: {chr(10).join(logical_assignments[:5]) if logical_assignments else 'None'}
 """
 
         thermal_data_str = f"""
 Total thermal images: {len(thermal_pages)}
-Successfully correlated: {len(thermal_pages) - unmatched_count}
+Successfully visually correlated: {len(thermal_pages) - unmatched_count - len(logical_assignments)}
+Logically assigned (no visual match): {len(logical_assignments)}
 Unmatched/uncertain: {unmatched_count + len(low_confidence)}
 """
 

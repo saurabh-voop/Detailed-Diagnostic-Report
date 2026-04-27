@@ -16,15 +16,8 @@
       "area_description": "Hall Skirting level Dampness",
       "side": "negative",
       "confidence": "high",
-      "reason": "Both photos show an internal corner with water staining and discoloration on the walls and a similar floor tile pattern. The angle and the extent of the staining appear to be a very close match.",
-      "alternative_matches": [
-        1,
-        4,
-        10,
-        11,
-        12,
-        14
-      ]
+      "reason": "The visible light photo and Inspection Photo 5 both feature a corner with similar wall damage patterns and floor tiling.",
+      "alternative_matches": []
     }
   },
   {
@@ -44,11 +37,8 @@
       "area_description": "Hall Skirting level Dampness",
       "side": "negative",
       "confidence": "high",
-      "reason": "Both photos show a corner of a room with a dark door frame on the left. There is significant water staining and discoloration on the lower portion of the wall, with a raised texture in some areas. A slight pinkish hue is visible in the upper portion of the wall in the thermal visible photo, which is also present in photo 1.",
-      "alternative_matches": [
-        10,
-        11
-      ]
+      "reason": "The wall corner, lower damage pattern, and electrical socket placement are identical.",
+      "alternative_matches": []
     }
   },
   {
@@ -63,15 +53,14 @@
     "date": "27/09/22",
     "page_number": 3,
     "correlation": {
-      "matched_photo": 3,
+      "matched_photo": 2,
       "area_id": 1,
       "area_description": "Hall Skirting level Dampness",
       "side": "negative",
       "confidence": "high",
-      "reason": "Both photos show a similar wall with a window at the top. The pattern of staining and discoloration along the bottom of the wall, near the skirting board, is also consistent between the two images. The angle and perspective are also very similar.",
+      "reason": "Visible photo and Photo 2 share a similar wall area with mold/damage under a window with similar layout.",
       "alternative_matches": [
-        2,
-        11
+        3
       ]
     }
   },
@@ -92,11 +81,8 @@
       "area_description": "Common Bathroom tile  hollowness",
       "side": "positive",
       "confidence": "high",
-      "reason": "Both photos show a wall with a power outlet, a dark door frame on the left, and similar water damage/paint peeling near the bottom of the wall. The angle and lighting are also very similar.",
-      "alternative_matches": [
-        4,
-        1
-      ]
+      "reason": "The visible light photo shows a wall with a power outlet and damage at the bottom. Photo 10 has similar features: a wall with a power outlet positioned the same way, similar damage pattern, and color.",
+      "alternative_matches": []
     }
   },
   {
@@ -111,16 +97,13 @@
     "date": "27/09/22",
     "page_number": 5,
     "correlation": {
-      "matched_photo": 4,
+      "matched_photo": 1,
       "area_id": 1,
       "area_description": "Hall Skirting level Dampness",
       "side": "negative",
       "confidence": "high",
-      "reason": "Both photos show the same section of wall with similar water damage at the base. The angle and the presence of a dark vertical element (door frame) on the left align.",
-      "alternative_matches": [
-        1,
-        10
-      ]
+      "reason": "Similar wall corner with noticeable water damage patterns and color of the wall, similar base features.",
+      "alternative_matches": []
     }
   },
   {
@@ -135,16 +118,14 @@
     "date": "27/09/22",
     "page_number": 6,
     "correlation": {
-      "matched_photo": 1,
-      "area_id": 1,
-      "area_description": "Hall Skirting level Dampness",
-      "side": "negative",
+      "matched_photo": 17,
+      "area_id": 2,
+      "area_description": "Common Bathroom tile  hollowness",
+      "side": "positive",
       "confidence": "high",
-      "reason": "Both the thermal visible photo and Photo 1 show a wall with similar water staining patterns near the floor, the same tile flooring, and a vertical edge on the left side. Photo 1 also shows a small pipe fitting in a similar location to where one might be expected based on the staining pattern in the thermal photo.",
+      "reason": "Both images show a similar lower wall section with visible damage near the floor, matching the discoloration patterns and layout.",
       "alternative_matches": [
-        4,
-        10,
-        14
+        19
       ]
     }
   },
@@ -160,15 +141,13 @@
     "date": "27/09/22",
     "page_number": 7,
     "correlation": {
-      "matched_photo": 5,
+      "matched_photo": 1,
       "area_id": 1,
       "area_description": "Hall Skirting level Dampness",
       "side": "negative",
       "confidence": "high",
-      "reason": "Both photos show a corner of a room with a white wall and a slightly darker skirting board. There is evidence of staining and discoloration on the wall and skirting board in both images, particularly in the corner. The floor tiling also appears to be the same in both images.",
-      "alternative_matches": [
-        11
-      ]
+      "reason": "The visible light photo and inspection Photo 1 both show a corner with a wall base, similar wall damage patterns, and a specific angle of the walls and floor.",
+      "alternative_matches": []
     }
   },
   {
@@ -188,10 +167,8 @@
       "area_description": "Hall Skirting level Dampness",
       "side": "negative",
       "confidence": "high",
-      "reason": "Both photos show a distinct corner where two walls meet. The visible light photo shows discoloration and what appears to be mold or water damage in that corner and along the baseboard, which is also present in inspection photo 5. The texture and pattern of the damage are very similar.",
-      "alternative_matches": [
-        12
-      ]
+      "reason": "Both images show a corner with similar wall damage and floor layout.",
+      "alternative_matches": []
     }
   },
   {
@@ -206,16 +183,13 @@
     "date": "27/09/22",
     "page_number": 9,
     "correlation": {
-      "matched_photo": 4,
+      "matched_photo": 1,
       "area_id": 1,
       "area_description": "Hall Skirting level Dampness",
       "side": "negative",
       "confidence": "high",
-      "reason": "Both photos show a wall with peeling paint and water damage near the baseboard. The pattern and extent of the damage are very similar. The angle of the shot and the presence of a small pipe or fixture also align.",
-      "alternative_matches": [
-        1,
-        10
-      ]
+      "reason": "Identical wall corner with a similar layout and visible pipe, along with similar wall damage patterns.",
+      "alternative_matches": []
     }
   },
   {
@@ -230,16 +204,13 @@
     "date": "27/09/22",
     "page_number": 10,
     "correlation": {
-      "matched_photo": 14,
-      "area_id": null,
-      "area_description": "Not Available",
-      "side": "unknown",
+      "matched_photo": 2,
+      "area_id": 1,
+      "area_description": "Hall Skirting level Dampness",
+      "side": "negative",
       "confidence": "high",
-      "reason": "The thermal visible photo and photo 14 show the same wall area with a distinct water stain pattern, electrical outlets at the same height, and similar flooring. The angle and lighting are also very close.",
-      "alternative_matches": [
-        2,
-        11
-      ]
+      "reason": "The wall with similar molding and electrical outlet arrangement matches closely with dirt and damage patterns.",
+      "alternative_matches": []
     }
   },
   {
@@ -259,11 +230,8 @@
       "area_description": "Hall Skirting level Dampness",
       "side": "negative",
       "confidence": "high",
-      "reason": "Both photos show a corner of a room with similar discoloration and damage patterns on the walls near the baseboard. The texture and distribution of the water marks are consistent between the two images.",
-      "alternative_matches": [
-        1,
-        11
-      ]
+      "reason": "The corner of the wall with similar floor tiles and same pattern of damage is present.",
+      "alternative_matches": []
     }
   },
   {
@@ -278,16 +246,15 @@
     "date": "27/09/22",
     "page_number": 12,
     "correlation": {
-      "matched_photo": 1,
+      "matched_photo": 4,
       "area_id": 1,
       "area_description": "Hall Skirting level Dampness",
       "side": "negative",
       "confidence": "high",
-      "reason": "The thermal visible photo shows water staining and discoloration at the base of a wall, extending upwards slightly. Photo 1 shows a similar wall with identical water staining patterns and the same floor tiles meeting the wall. The angle and the presence of a dark vertical element on the left in Photo 1 also align with the framing of the thermal visible photo.",
+      "reason": "Both photos show a wall with similar water damage patterns along the bottom, with an exposed patch and discoloration extending from left to right.",
       "alternative_matches": [
-        4,
-        10,
-        14
+        2,
+        11
       ]
     }
   },
@@ -308,10 +275,8 @@
       "area_description": "Hall Skirting level Dampness",
       "side": "negative",
       "confidence": "high",
-      "reason": "Both photos show the same corner of a room with light-colored walls and a dark doorframe on the left. The pattern of water damage and discoloration at the base of the wall is identical. The floor tiles also appear to be the same.",
-      "alternative_matches": [
-        4
-      ]
+      "reason": "Both photos show a corner with the same wall color, damage patterns, and floor type.",
+      "alternative_matches": []
     }
   },
   {
@@ -326,14 +291,15 @@
     "date": "27/09/22",
     "page_number": 14,
     "correlation": {
-      "matched_photo": 11,
+      "matched_photo": 6,
       "area_id": 1,
-      "area_description": "Common Bathroom tile  hollowness",
-      "side": "positive",
-      "confidence": "high",
-      "reason": "The thermal visible photo shows a distinctive pattern of discoloration and texture on the lower portion of a light-colored wall, near the floor. Inspection photo 11 displays the same discoloration pattern, including the prominent gray splotchy area, at the same height and location relative to the corner. The floor tiles also appear to be the same.",
+      "area_description": "Hall Skirting level Dampness",
+      "side": "negative",
+      "confidence": "medium",
+      "reason": "The wall and floor in inspection photo 6 show discoloration and patterns similar to those in the thermal visible photo.",
       "alternative_matches": [
-        14
+        5,
+        11
       ]
     }
   },
@@ -354,10 +320,9 @@
       "area_description": "Hall Skirting level Dampness",
       "side": "negative",
       "confidence": "high",
-      "reason": "Both photos show an interior corner with similar wall discoloration and flooring. The angle and the presence of a baseboard match.",
+      "reason": "The photo shows a similar corner configuration with visible water damage patterns at the bottom of the wall and similar floor details.",
       "alternative_matches": [
-        1,
-        11
+        1
       ]
     }
   },
@@ -373,12 +338,12 @@
     "date": "27/09/22",
     "page_number": 16,
     "correlation": {
-      "matched_photo": 12,
-      "area_id": null,
-      "area_description": "Not Available",
-      "side": "unknown",
+      "matched_photo": 10,
+      "area_id": 1,
+      "area_description": "Common Bathroom tile  hollowness",
+      "side": "positive",
       "confidence": "high",
-      "reason": "Both photos show a white wall with a white electrical outlet plate containing two switches and an electrical socket. The wall texture and the light color are also consistent. The position of the outlet is similar.",
+      "reason": "The visible light photo and inspection photo 10 both show a section of wall with an electrical outlet. The outlet position and wall condition match.",
       "alternative_matches": []
     }
   },
@@ -399,12 +364,8 @@
       "area_description": "Hall Skirting level Dampness",
       "side": "negative",
       "confidence": "high",
-      "reason": "The thermal visible photo shows a wall with staining and discoloration near the baseboard. Inspection photo 1 shows the same wall, floor, and baseboard area with similar staining patterns and texture. The angle and perspective are very close.",
-      "alternative_matches": [
-        10,
-        4,
-        14
-      ]
+      "reason": "The visible light photo and Inspection Photo 1 show similar wall features, damage patterns, and flooring alignment.",
+      "alternative_matches": []
     }
   },
   {
@@ -419,16 +380,15 @@
     "date": "27/09/22",
     "page_number": 18,
     "correlation": {
-      "matched_photo": 1,
+      "matched_photo": 6,
       "area_id": 1,
       "area_description": "Hall Skirting level Dampness",
       "side": "negative",
-      "confidence": "high",
-      "reason": "The visible light photo from the thermal inspection shows a white wall with a discolored area at the bottom, consistent with water damage. Inspection photo 1 shows a very similar wall area with matching discoloration patterns near the baseboard, and what appears to be the same type of tiled floor and doorway frame. The angle and lighting are also very similar.",
+      "confidence": "medium",
+      "reason": "Both images show a section of wall with patchy marks near the floor, no distinct features distinguish them more solidly.",
       "alternative_matches": [
-        4,
-        10,
-        14
+        5,
+        11
       ]
     }
   },
@@ -449,7 +409,7 @@
       "area_description": "Hall Skirting level Dampness",
       "side": "negative",
       "confidence": "high",
-      "reason": "Both photos show an interior corner of a room with similar discoloration and staining patterns on the walls near the ceiling and down to the baseboard. The angle and lighting also appear consistent.",
+      "reason": "The visible light photo and Photo 5 both show a corner with similar stains and discoloration patterns on the walls, suggesting moisture damage.",
       "alternative_matches": []
     }
   },
@@ -470,10 +430,9 @@
       "area_description": "Hall Skirting level Dampness",
       "side": "negative",
       "confidence": "high",
-      "reason": "Both photos show a corner of a room with water damage and discoloration along the bottom of the wall. The pattern of the damage and the presence of a light-colored baseboard are consistent. The angle and framing are also very similar.",
+      "reason": "The visible light photo shows damage and marks on the wall similar to those in photo 5, particularly around the corner area. The flooring and lower wall sections also match in appearance.",
       "alternative_matches": [
-        1,
-        11
+        6
       ]
     }
   },
@@ -489,16 +448,13 @@
     "date": "27/09/22",
     "page_number": 21,
     "correlation": {
-      "matched_photo": 5,
+      "matched_photo": 1,
       "area_id": 1,
       "area_description": "Hall Skirting level Dampness",
       "side": "negative",
       "confidence": "high",
-      "reason": "The thermal visible photo shows water staining and discoloration in the corner of a room near the floor, with what appears to be mold growth. Photo 5 shows a very similar corner with comparable water staining and discoloration patterns on the wall and baseboard.",
-      "alternative_matches": [
-        1,
-        11
-      ]
+      "reason": "The visible light photo shows a white wall with mold or water damage along the bottom edge, similar to Photo 1. The position and pattern of discoloration on the wall match closely.",
+      "alternative_matches": []
     }
   },
   {
@@ -513,12 +469,12 @@
     "date": "27/09/22",
     "page_number": 22,
     "correlation": {
-      "matched_photo": 32,
-      "area_id": 4,
-      "area_description": "Kitchen Skirting level  Dampness",
+      "matched_photo": 1,
+      "area_id": 1,
+      "area_description": "Hall Skirting level Dampness",
       "side": "negative",
       "confidence": "high",
-      "reason": "Both the thermal visible photo and inspection photo 32 show a ceiling with significant water damage, including discoloration, peeling paint, and staining. The pattern of the damage and the texture of the ceiling appear to be the same.",
+      "reason": "The wall in both the thermal photo and Photo 1 has similar stains and marks near the base of the wall, indicating mold or moisture damage.",
       "alternative_matches": []
     }
   },
@@ -534,10 +490,16 @@
     "date": "27/09/22",
     "page_number": 23,
     "correlation": {
-      "matched_photo": null,
-      "area_id": null,
-      "confidence": "low",
-      "reason": "No match found across all batches"
+      "matched_photo": 5,
+      "area_id": 1,
+      "area_description": "Hall Skirting level Dampness",
+      "side": "negative",
+      "confidence": "high",
+      "reason": "Both photos show a corner with similar floor, wall conditions, and damage patterns.",
+      "alternative_matches": [
+        1,
+        6
+      ]
     }
   },
   {
@@ -552,10 +514,15 @@
     "date": "27/09/22",
     "page_number": 24,
     "correlation": {
-      "matched_photo": null,
-      "area_id": null,
-      "confidence": "low",
-      "reason": "No match found across all batches"
+      "matched_photo": 1,
+      "area_id": 1,
+      "area_description": "Hall Skirting level Dampness",
+      "side": "negative",
+      "confidence": "high",
+      "reason": "Both photos show a white wall with noticeable discoloration or damage in a similar pattern and area.",
+      "alternative_matches": [
+        5
+      ]
     }
   },
   {
@@ -570,10 +537,16 @@
     "date": "27/09/22",
     "page_number": 25,
     "correlation": {
-      "matched_photo": null,
-      "area_id": null,
-      "confidence": "low",
-      "reason": "No match found across all batches"
+      "matched_photo": 6,
+      "area_id": 1,
+      "area_description": "Hall Skirting level Dampness",
+      "side": "negative",
+      "confidence": "high",
+      "reason": "The wall in photo 6 shows a similar pattern of discoloration and features on the bottom left side as seen in the thermal visible photo.",
+      "alternative_matches": [
+        5,
+        11
+      ]
     }
   },
   {
@@ -588,10 +561,16 @@
     "date": "27/09/22",
     "page_number": 26,
     "correlation": {
-      "matched_photo": null,
-      "area_id": null,
-      "confidence": "low",
-      "reason": "No match found across all batches"
+      "matched_photo": 11,
+      "area_id": 1,
+      "area_description": "Common Bathroom tile  hollowness",
+      "side": "positive",
+      "confidence": "high",
+      "reason": "Both photos show a plain white wall with subtle marks and discoloration near the bottom, similar positioning and lighting.",
+      "alternative_matches": [
+        6,
+        10
+      ]
     }
   },
   {
@@ -606,10 +585,16 @@
     "date": "27/09/22",
     "page_number": 27,
     "correlation": {
-      "matched_photo": null,
-      "area_id": null,
-      "confidence": "low",
-      "reason": "No match found across all batches"
+      "matched_photo": 6,
+      "area_id": 1,
+      "area_description": "Hall Skirting level Dampness",
+      "side": "negative",
+      "confidence": "high",
+      "reason": "The wall in Photo 6 shows discoloration and damage patterns similar to the visible light photo from the thermal report, with a matching horizontal line of damage.",
+      "alternative_matches": [
+        5,
+        4
+      ]
     }
   },
   {
@@ -624,10 +609,16 @@
     "date": "27/09/22",
     "page_number": 28,
     "correlation": {
-      "matched_photo": null,
-      "area_id": null,
-      "confidence": "low",
-      "reason": "No match found across all batches"
+      "matched_photo": 5,
+      "area_id": 1,
+      "area_description": "Hall Skirting level Dampness",
+      "side": "negative",
+      "confidence": "high",
+      "reason": "Similar wall texture and damage pattern in a corner location with skirting.",
+      "alternative_matches": [
+        1,
+        6
+      ]
     }
   },
   {
@@ -642,10 +633,15 @@
     "date": "27/09/22",
     "page_number": 29,
     "correlation": {
-      "matched_photo": null,
-      "area_id": null,
-      "confidence": "low",
-      "reason": "No match found across all batches"
+      "matched_photo": 18,
+      "area_id": 2,
+      "area_description": "Common Bathroom tile  hollowness",
+      "side": "positive",
+      "confidence": "high",
+      "reason": "The wall and lower area show similar patterns of discoloration and surface damage as seen in the thermal visible photo.",
+      "alternative_matches": [
+        17
+      ]
     }
   },
   {
@@ -660,10 +656,15 @@
     "date": "27/09/22",
     "page_number": 30,
     "correlation": {
-      "matched_photo": null,
-      "area_id": null,
-      "confidence": "low",
-      "reason": "No match found across all batches"
+      "matched_photo": 5,
+      "area_id": 1,
+      "area_description": "Hall Skirting level Dampness",
+      "side": "negative",
+      "confidence": "high",
+      "reason": "The photo shows a similar corner with similar plaster damage and coloration pattern.",
+      "alternative_matches": [
+        1
+      ]
     }
   }
 ]

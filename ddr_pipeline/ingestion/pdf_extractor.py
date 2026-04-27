@@ -73,21 +73,30 @@ def _parse_property_info(text: str) -> dict:
     info = {}
     lines = [l.strip() for l in text.split('\n') if l.strip()]
 
-    # Fields whose value appears on the line immediately following the label
+    # Fields: value may appear after a colon on same line, or on next line
     label_map = {
         "inspection_date": ["Inspection Date"],
         "inspected_by": ["Inspected By"],
         "property_type": ["Property Type"],
-        "previous_structural_audit": ["Previous Structural audit"],
-        "previous_repair_work": ["Previous Repair work"],
-        "impacted_rooms": ["Impacted Areas/Rooms", "Impacted Rooms"],
+        "previous_structural_audit": ["Previous Structural audit", "Structural audit"],
+        "previous_repair_work": ["Previous Repair work", "Repair work"],
+        "impacted_rooms": ["Impacted Areas/Rooms", "Impacted Rooms", "Impacted Areas"],
     }
     for key, markers in label_map.items():
         info[key] = "Not Available"
         for i, line in enumerate(lines):
-            if any(m in line for m in markers) and i + 1 < len(lines):
+            if not any(m.lower() in line.lower() for m in markers):
+                continue
+            # Try inline "Label: Value"
+            if ':' in line:
+                val = line.split(':', 1)[1].strip()
+                if val and not any(m.lower() in val.lower() for m in markers):
+                    info[key] = val
+                    break
+            # Try next-line value
+            if i + 1 < len(lines):
                 val = lines[i + 1].strip().rstrip(':')
-                if val and not any(m in val for m in markers):
+                if val and not any(m.lower() in val.lower() for m in markers):
                     info[key] = val
                     break
 
@@ -100,25 +109,40 @@ def _parse_property_info(text: str) -> dict:
     info["floors"] = int(floors_match.group(1)) if floors_match else "Not Available"
 
     # Flagged items
-    flagged_match = re.search(r'Flagged items\s+(\d+)', text, re.IGNORECASE)
+    flagged_match = re.search(r'Flagged\s+items?[:\s]+(\d+)', text, re.IGNORECASE)
     info["flagged_items"] = int(flagged_match.group(1)) if flagged_match else "Not Available"
 
     return info
 
 
+def _extract_photo_numbers(text: str) -> list:
+    """
+    Extract photo numbers handling both individual references and ranges.
+    Handles: "Photo 5", "Photos 59 to 64", "Photos 12-15"
+    """
+    numbers = set()
+    # Range formats: "Photos N to M" or "Photos N-M"
+    for m in re.finditer(r'Photos?\s+(\d+)\s+(?:to|-)\s+(\d+)', text, re.IGNORECASE):
+        numbers.update(range(int(m.group(1)), int(m.group(2)) + 1))
+    # Individual: "Photo N" (only if not already covered by a range)
+    for m in re.finditer(r'Photo\s+(\d+)', text, re.IGNORECASE):
+        numbers.add(int(m.group(1)))
+    return sorted(numbers)
+
+
 def _parse_impacted_areas(text: str) -> list:
     areas = []
 
-    # Split the combined text on "Impacted Area N" headers
-    blocks = re.split(r'Impacted Area\s+\d+', text, flags=re.IGNORECASE)
+    # Split on "Impacted Area N" headers, tolerating whitespace variations
+    blocks = re.split(r'Impacted\s+Area\s+\d+', text, flags=re.IGNORECASE)
 
     for idx, block in enumerate(blocks[1:], start=1):
         area = {"area_id": idx}
 
-        # Negative side description
+        # Negative side description — value may follow on same line or next line
         neg_desc_m = re.search(
-            r'Negative side Description\s*\n(.+?)'
-            r'(?=\nNegative side photographs|\nPositive side Description|\nImpacted Area|\Z)',
+            r'Negative\s+side\s+Description\s*[:\n]\s*(.+?)'
+            r'(?=Negative\s+side\s+photographs|Positive\s+side\s+Description|Impacted\s+Area|\Z)',
             block, re.DOTALL | re.IGNORECASE
         )
         area["negative_description"] = (
@@ -128,8 +152,8 @@ def _parse_impacted_areas(text: str) -> list:
 
         # Positive side description
         pos_desc_m = re.search(
-            r'Positive side Description\s*\n(.+?)'
-            r'(?=\nPositive side photographs|\nImpacted Area|\nSite Details|\Z)',
+            r'Positive\s+side\s+Description\s*[:\n]\s*(.+?)'
+            r'(?=Positive\s+side\s+photographs|Impacted\s+Area|Site\s+Details|\Z)',
             block, re.DOTALL | re.IGNORECASE
         )
         area["positive_description"] = (
@@ -137,24 +161,24 @@ def _parse_impacted_areas(text: str) -> list:
             if pos_desc_m else "Not Available"
         )
 
-        # Negative photos
+        # Negative photos — extract from the negative-side block
         neg_block_m = re.search(
-            r'Negative side photographs(.+?)'
-            r'(?=Positive side Description|Impacted Area|\Z)',
+            r'Negative\s+side\s+photographs(.+?)'
+            r'(?=Positive\s+side\s+Description|Impacted\s+Area|\Z)',
             block, re.DOTALL | re.IGNORECASE
         )
         area["negative_photos"] = (
-            [int(n) for n in re.findall(r'Photo\s+(\d+)', neg_block_m.group(1))]
+            _extract_photo_numbers(neg_block_m.group(1))
             if neg_block_m else []
         )
 
         # Positive photos
         pos_block_m = re.search(
-            r'Positive side photographs(.+?)(?=Impacted Area|\Z)',
+            r'Positive\s+side\s+photographs(.+?)(?=Impacted\s+Area|\Z)',
             block, re.DOTALL | re.IGNORECASE
         )
         area["positive_photos"] = (
-            [int(n) for n in re.findall(r'Photo\s+(\d+)', pos_block_m.group(1))]
+            _extract_photo_numbers(pos_block_m.group(1))
             if pos_block_m else []
         )
 
