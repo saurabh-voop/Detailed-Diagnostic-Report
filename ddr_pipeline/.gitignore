@@ -2,3 +2,6 @@
 venv
 *.jpeg
 *.jpg
+*.pyc
+__pycache__/
+outputs/
